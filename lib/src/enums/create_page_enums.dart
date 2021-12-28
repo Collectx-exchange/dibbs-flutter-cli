@@ -1,0 +1,6 @@
+
+enum PageNavigation {
+
+  withArguments, withoutArguments
+
+}
