@@ -1,0 +1,25 @@
+name: dibbs_flutter_cli
+description: A starting point for Dart libraries or applications.
+version: 1.0.0
+# homepage: https://www.example.com
+
+environment:
+  sdk: '>=2.14.3 <3.0.0'
+
+executables:
+  dibbs: main
+
+dependencies:
+  recase: ^4.0.0
+  ansicolor: ^2.0.1
+  http: ^0.13.4
+  path: ^1.8.1
+  yaml: ^3.1.0
+  args: ^2.3.0
+  dart_console: ^1.0.0
+  tuple: ^2.0.0
+  pubspec_yaml: ^3.1.0
+
+dev_dependencies:
+  test: ^1.20.1
+  pedantic: ^1.11.1
