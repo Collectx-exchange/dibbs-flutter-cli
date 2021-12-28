@@ -10,36 +10,21 @@ import 'package:dibbs_flutter_cli/src/utils/utils.dart';
 import 'package:path/path.dart';
 
 import '../utils/utils.dart';
+import 'generate_page.dart';
 
 class Generate {
-  static Future<void> module(
+  static Future<void> feature(
     String path,
-    bool createCompleteModule,
+    bool createCompleteFeature,
   ) async {
-    var moduleType = createCompleteModule ? 'module_complete' : 'module';
-    var templateModular = templates.getXBindingsGenerator;
+    var featureType = createCompleteFeature ? 'feature_complete' : 'feature';
+    var templateGetXBindings = templates.getXBindingsGenerator;
 
     path = 'app/' + path;
 
-    await file_utils.createFile(path, moduleType, templateModular);
-    if (createCompleteModule) {
-      await page(path, false);
-    }
-  }
-
-  static Future<void> page(String path, bool controllerLess) async {
-    path = 'app/' + path;
-
-    await file_utils.createFile(
-      '$path',
-      'page',
-      templates.statelessPageGenerator,
-      generatorTest: templates.pageTestGenerator,
-    );
-    var name = basename(path);
-    if (!controllerLess) {
-      var type = 'controller';
-      await controller('$path/$name', type);
+    await file_utils.createFile(path, featureType, templateGetXBindings);
+    if (createCompleteFeature) {
+      await page(path);
     }
   }
 
@@ -179,24 +164,9 @@ class Generate {
     );
   }
 
-  static Future<void> controller(String path, String type,
-      {bool haveTest = true}) async {
-    final template = templates.getXControllerGenerator;
-    final testTemplate = templates.getXControllerTestGenerator;
-
-    path = 'app/' + path;
-
-    await file_utils.createFile(
-      path,
-      type,
-      template,
-      generatorTest: haveTest ? testTemplate : null,
-    );
-  }
-
   static Future<void> dataSource(String name,
       {bool haveTest = true, String usage = ''}) async {
-    var dataSource = await chooseDataSource();
+    final dataSource = await chooseDataSource();
 
     if (dataSource == DataSource.onlyLocal) {
       await file_utils.createFile(

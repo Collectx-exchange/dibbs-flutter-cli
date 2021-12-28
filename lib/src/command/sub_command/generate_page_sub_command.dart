@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:args/command_runner.dart';
-import 'package:dibbs_flutter_cli/src/modules/generate.dart';
+import 'package:dibbs_flutter_cli/src/modules/generate_page.dart';
 
 import '../command_base.dart';
 
@@ -11,7 +11,7 @@ class GeneratePageSubCommand extends CommandBase {
   @override
   final description = 'Creates a page';
 
-  GeneratePageSubCommand() {
+ /* GeneratePageSubCommand() {
     argParser.addFlag('controller',
         abbr: 'c',
         negatable: false,
@@ -22,7 +22,7 @@ class GeneratePageSubCommand extends CommandBase {
       negatable: false,
       help: 'Creates a page without i18n file',
     );
-  }
+  }*/
 
   @override
   Future<FutureOr<void>> run() async {
@@ -31,9 +31,8 @@ class GeneratePageSubCommand extends CommandBase {
     if (argResults == null || rest == null || rest.isEmpty) {
       throw UsageException('value not passed for a module command', usage);
     } else {
-      await Generate.page(
+      await page(
         rest.first,
-        argResults['controller'],
       );
     }
     super.run();

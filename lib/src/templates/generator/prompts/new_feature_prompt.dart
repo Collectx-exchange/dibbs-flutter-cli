@@ -21,7 +21,8 @@ Future<bool> get chooseCreatingViewModel async {
   final select = selectOption(
     'Do you want to create a view model?',
     [
-      'Yes (default), No',
+      'Yes (default)',
+      'No',
     ],
   );
 
@@ -39,7 +40,8 @@ Future<bool> get chooseCreatingAdapter async {
   final select = selectOption(
     'Do you want to create an adapter',
     [
-      'Yes (default), No',
+      'Yes (default)',
+      'No',
     ],
   );
 
@@ -51,5 +53,4 @@ Future<bool> get chooseCreatingAdapter async {
     default:
       return true;
   }
-
 }

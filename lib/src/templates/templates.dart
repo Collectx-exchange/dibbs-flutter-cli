@@ -12,3 +12,6 @@ export 'generator/use_case_generator.dart';
 export 'generator/use_case_test_generator.dart';
 export 'generator/widget_generator.dart';
 export 'generator/widget_test_generator.dart';
+export 'generator/page_arguments_generator.dart';
+export 'generator/adapter_generator.dart';
+export 'generator/view_model_generator.dart';

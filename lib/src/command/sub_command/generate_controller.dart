@@ -1,5 +1,5 @@
 import 'package:args/command_runner.dart';
-import 'package:dibbs_flutter_cli/src/modules/generate.dart';
+import 'package:dibbs_flutter_cli/src/modules/generate_page.dart';
 
 import '../command_base.dart';
 
@@ -25,7 +25,7 @@ class GenerateControllerSubCommand extends CommandBase {
     if (rest == null || rest.isEmpty) {
       throw UsageException('value not passed for a module command', usage);
     } else {
-      await Generate.controller(
+      await controller(
         rest.first,
         'controller',
         haveTest: argResults != null && !argResults['notest'],
