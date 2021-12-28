@@ -3,7 +3,7 @@ import 'package:dibbs_flutter_cli/src/modules/start/select_option.dart';
 
 Future<DataSource> chooseDataSource() async {
 
-  var selected = selectOption(
+  final selected = selectOption(
     'What kind of data source do you want to generate?',
     ['Local and Remote (default)', 'Only Local', 'Only Remote'],
   );
