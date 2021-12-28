@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:dart_console/dart_console.dart';
-import 'package:flutter_snow_blower/src/utils/output_utils.dart' as output;
+import 'package:dibbs_flutter_cli/src/utils/output_utils.dart' as output;
 
 int selectOption(String title, List<String> options) {
   stdin.echoMode = false;
@@ -12,7 +12,7 @@ int selectOption(String title, List<String> options) {
 
   while (isRunning) {
     print('\x1B[2J\x1B[0;0H');
-    output.title('Flutter Snow Blower CLI Interative\n');
+    output.title('Dibbs Flutter CLI Interative\n');
     output.warn(title);
     for (var i = 0; i < options.length; i++) {
       if (selected == i) {
