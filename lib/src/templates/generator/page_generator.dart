@@ -41,7 +41,7 @@ import '${ReCase(obj.name).snakeCase}_controller.dart';
 
 class ${obj.name}Page extends GetView<${obj.name}Controller> {
 
-  static Future? get navigateWith({required ${obj.name}Arguments arguments}) => 
+  static Future? navigateWith({required ${obj.name}Arguments arguments}) => 
     Get.toNamed('', arguments: arguments);
 
   const ${obj.name}Page({Key key}) : super(key: key);

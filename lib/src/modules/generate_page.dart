@@ -3,21 +3,23 @@ import 'package:dibbs_flutter_cli/src/templates/generator/prompts/new_feature_pr
 import 'package:dibbs_flutter_cli/src/templates/templates.dart' as templates;
 import 'package:dibbs_flutter_cli/src/utils/file_utils.dart' as file_utils;
 
-Future<void> page(String path) async {
-
+Future<void> page(String name) async {
   final pageNavigation = await choosePageNavigation;
+  final root = 'app/pages/';
 
   //ToDo(): Create/Add test template
   switch (pageNavigation) {
     case PageNavigation.withArguments:
       await file_utils.createFile(
-        'app/pages/' + path,
+        root + name,
+        name,
         'page',
         templates.pageGeneratorGetXWithArguments,
-        generatorTest: templates.pageTestGenerator,
+        generatorTest: null,
       );
       await file_utils.createFile(
-        '$path/arguments/' + path,
+        root + name + '/arguments/',
+        name,
         'arguments',
         templates.pageArgumentsGenerator,
         generatorTest: null,
@@ -25,7 +27,8 @@ Future<void> page(String path) async {
       break;
     case PageNavigation.withoutArguments:
       await file_utils.createFile(
-        '$path',
+        root + name,
+        name,
         'page',
         templates.pageGeneratorGetX,
         generatorTest: null,
@@ -38,7 +41,8 @@ Future<void> page(String path) async {
   //ToDo(): Create/Add test template
   if (createViewModel)
     await file_utils.createFile(
-      '$path/view_model/' + path,
+      root + name + '/view_model/',
+      name,
       'view_model',
       templates.viewModelGenerator,
       generatorTest: null,
@@ -49,24 +53,26 @@ Future<void> page(String path) async {
   //ToDo(): Create/Add test template
   if (createAdapter)
     await file_utils.createFile(
-      '$path/adapter/' + path,
+      root + name + '/adapter/',
+      name,
       'adapter',
       templates.adapterGenerator,
       generatorTest: null,
     );
 
-  await controller('$path/' + path, 'controller');
-  await bindings('$path/bindings/' + path, 'bindings');
+  await controller(root + name, name, 'controller');
+  await bindings(root + name + '/bindings/', name, 'bindings');
 }
 
 //ToDo(): Create/Add test template
-Future<void> controller(String path, String type,
+Future<void> controller(String path, String name, String type,
     {bool haveTest = true}) async {
   final template = templates.getXControllerGenerator;
   //final testTemplate = templates.getXControllerTestGenerator;
 
   await file_utils.createFile(
     path,
+    name,
     type,
     template,
     generatorTest: null,
@@ -75,14 +81,14 @@ Future<void> controller(String path, String type,
 
 Future<void> bindings(
   String path,
+  String name,
   String type,
 ) async {
   var templateGetXBindings = templates.getXBindingsGenerator;
 
-  path = 'app/bindings/' + path;
-
   await file_utils.createFile(
     path,
+    name,
     type,
     templateGetXBindings,
     generatorTest: null,

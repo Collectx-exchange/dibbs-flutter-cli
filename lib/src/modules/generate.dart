@@ -14,35 +14,36 @@ import 'generate_page.dart';
 
 class Generate {
   static Future<void> feature(
-    String path,
+    String name,
     bool createCompleteFeature,
   ) async {
     var featureType = createCompleteFeature ? 'feature_complete' : 'feature';
     var templateGetXBindings = templates.getXBindingsGenerator;
 
-    path = 'app/' + path;
+    final path = 'app/' + name;
 
-    await file_utils.createFile(path, featureType, templateGetXBindings);
+    await file_utils.createFile(path, name, featureType, templateGetXBindings);
     if (createCompleteFeature) {
-      await page(path);
+      await page(name);
     }
   }
 
-  static Future<void> widget(String path, bool withController) async {
-    path = 'app/' + path;
+  static Future<void> widget(
+      String path, String name, bool withController) async {
+    final path = 'app/' + name;
 
     await file_utils.createFile(
       '$path',
+      name,
       'widget',
       templates.widgetGenerator,
       generatorTest: templates.widgetTestGenerator,
     );
 
-    var name = basename(path);
     if (withController) {
       var type = 'controller';
 
-      return controller('$path/$name', type, haveTest: true);
+      return controller('$path/$name', name, type, haveTest: true);
     }
   }
 
@@ -139,24 +140,25 @@ class Generate {
   }
 
   static Future<void> repository(
-    String path, {
+    String path,
+    String name, {
     bool haveTest = true,
     bool complete = false,
   }) async {
-    final name = basename(path);
-
     if (complete) {
       await dataSource(name);
     }
 
     await file_utils.createFile(
       'domain/repositories/$name/$name',
+      name,
       'repository',
       templates.repositoryGeneratorClean,
       generatorTest: null,
     );
     await file_utils.createFile(
       'data/repositories/$name',
+      name,
       'repository_impl',
       templates.repositoryImplGeneratorClean,
       generatorTest:
@@ -171,6 +173,7 @@ class Generate {
     if (dataSource == DataSource.onlyLocal) {
       await file_utils.createFile(
         'data/data_sources/$name',
+        name,
         'local_data_source',
         templates.localDataSourceGenerator,
         generatorTest: haveTest ? templates.localDataSourceGeneratorTest : null,
@@ -178,6 +181,7 @@ class Generate {
     } else if (dataSource == DataSource.onlyRemote) {
       await file_utils.createFile(
         'data/data_sources/$name',
+        name,
         'remote_data_source',
         templates.remoteDataSourceGenerator,
         generatorTest:
@@ -186,12 +190,14 @@ class Generate {
     } else {
       await file_utils.createFile(
         'data/data_sources/$name',
+        name,
         'local_data_source',
         templates.localDataSourceGenerator,
         generatorTest: haveTest ? templates.localDataSourceGeneratorTest : null,
       );
       await file_utils.createFile(
         'data/data_sources/$name',
+        name,
         'remote_data_source',
         templates.remoteDataSourceGenerator,
         generatorTest:
@@ -204,6 +210,7 @@ class Generate {
     final haveEquatable = await checkDependency('equatable');
     await file_utils.createFile(
       'domain/entities/$name',
+      name,
       'entity',
       templates.entityGenerator,
       generatorTest: null,
@@ -211,6 +218,7 @@ class Generate {
     );
     await file_utils.createFile(
       'data/mappers/$name',
+      name,
       'mapper',
       templates.entityMapperGenerator,
       generatorTest: null,
@@ -221,6 +229,7 @@ class Generate {
   static Future<void> useCase(String name, {String usage = ''}) async {
     await file_utils.createFile(
       'domain/usecases/$name',
+      name,
       'use_case',
       templates.useCaseGenerator,
       generatorTest: templates.useCaseTestGenerator,

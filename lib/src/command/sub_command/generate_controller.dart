@@ -26,6 +26,7 @@ class GenerateControllerSubCommand extends CommandBase {
       throw UsageException('value not passed for a module command', usage);
     } else {
       await controller(
+        'app/pages/' + rest.first,
         rest.first,
         'controller',
         haveTest: argResults != null && !argResults['notest'],

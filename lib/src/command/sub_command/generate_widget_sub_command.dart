@@ -24,7 +24,11 @@ class GenerateWidgetSubCommand extends CommandBase {
     if (argResults == null || argResults.rest.isEmpty) {
       throw UsageException('value not passed for a module command', usage);
     } else {
-      await Generate.widget(argResults.rest.first, argResults['controller']);
+      await Generate.widget(
+        argResults.rest.first,
+        argResults.rest.first,
+        argResults['controller'],
+      );
     }
     super.run();
   }

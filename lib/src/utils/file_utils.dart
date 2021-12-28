@@ -9,6 +9,7 @@ import 'object_generate.dart';
 
 Future<void> createFile(
   String path,
+  String name,
   String type,
   Function(ObjectGenerate) generator, {
   Function(ObjectGenerate)? generatorTest,
@@ -24,17 +25,12 @@ Future<void> createFile(
   path = libPath(path);
 
   Directory dir;
-  if (type == 'store' ||
-      type == 'controller' ||
-      type == 'repository' ||
-      type == 'usecase' ||
-      type == 'service') {
+  if (type == 'repository' || type == 'usecase') {
     dir = Directory(path).parent;
   } else {
     dir = Directory(path);
   }
 
-  final name = basename(path);
   final file =
       File('${dir.path}/${name}_${type.replaceAll("_complete", "")}.dart');
   final fileTest = File(
@@ -54,75 +50,19 @@ Future<void> createFile(
   LocalSaveLog().add(file.path);
   output.msg('File ${file.path} created');
 
-  if (type == 'module_complete') {
-    file.writeAsStringSync(
-      generator(
-        ObjectGenerate(
-          packageName: package,
-          name: formatName(name),
-          pathModule: '$path/$name',
-          additionalInfo: additionalInfo,
-        ),
+  file.writeAsStringSync(
+    generator(
+      ObjectGenerate(
+        name: formatName(name),
+        type: type,
+        packageName: package,
+        additionalInfo: additionalInfo,
       ),
-    );
-  } else if (type == 'module') {
-    file.writeAsStringSync(
-      generator(
-        ObjectGenerate(
-          name: formatName(name),
-          packageName: package,
-          pathModule: path,
-          additionalInfo: additionalInfo,
-        ),
-      ),
-    );
-  } else if (type == 'mapper') {
-    file.writeAsStringSync(
-      generator(
-        ObjectGenerate(
-          name: formatName(name),
-          type: type,
-          packageName: package,
-          additionalInfo: additionalInfo,
-        ),
-      ),
-    );
-    final indexPath = libPath('data/mappers/index.dart');
-    final content = "export '$name/${name}_mapper.dart';";
-    if (existsFile('data/mappers/index.dart')) {
-      final indexFile = File(indexPath);
-      indexFile.writeAsStringSync(
-          File(indexPath).readAsStringSync() + content + '\n');
-    } else {
-      createStaticFile(indexPath, content);
-    }
-  } else {
-    file.writeAsStringSync(
-      generator(
-        ObjectGenerate(
-          name: formatName(name),
-          type: type,
-          packageName: package,
-          additionalInfo: additionalInfo,
-        ),
-      ),
-    );
-  }
+    ),
+  );
 
   File? module;
   String? nameModule;
-
-  if (type == 'controller' ||
-      type == 'repository' ||
-      type == 'store' ||
-      type == 'service') {
-    try {
-      module = await addModule(formatName('${name}_$type'), file.path);
-    } catch (e) {
-      print('not Module');
-    }
-    nameModule = module == null ? null : basename(module.path);
-  }
 
   if (generatorTest != null) {
     fileTest.createSync(recursive: true);

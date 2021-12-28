@@ -28,6 +28,7 @@ class GenerateRepositorySubCommand extends CommandBase {
     } else {
       await Generate.repository(
         argResults.rest.first,
+        argResults.rest.first,
         haveTest: !argResults['notest'],
         complete: argResults['complete'],
       );
