@@ -1,4 +1,6 @@
 import 'package:dibbs_flutter_cli/src/utils/object_generate.dart';
+import 'package:dibbs_flutter_cli/src/utils/utils.dart';
+import 'package:recase/recase.dart';
 
 String repositoryTestGenerator(ObjectGenerate obj) => '''
 import 'package:flutter_test/flutter_test.dart';
@@ -35,18 +37,41 @@ void main() {
 }
   ''';
 
-String repositoryImplTestGeneratorClean(ObjectGenerate objectGenerate) {
+String repositoryImplTestGenerator(ObjectGenerate objectGenerate) {
+  final nameSnaked = ReCase(objectGenerate.name).snakeCase;
+
+  final hasLocalDataSource = existsFile(
+      "core/data/data_sources/$nameSnaked/local/${nameSnaked}_local_data_source.dart");
+  final hasRemoteDataSource = existsFile(
+      "core/data/data_sources/$nameSnaked/remote/${nameSnaked}_remote_data_source.dart");
+
   return '''
+import 'package:${objectGenerate.packageName}/core/data/helpers/app_logger.dart';
+import 'package:${objectGenerate.packageName}/core/data/model/app_exception.dart';
+import 'package:${objectGenerate.packageName}/core/domain/managers/user_manager.dart';
+import 'package:graphql/client.dart';
+import 'package:mocktail/mocktail.dart';
+import 'package:test/test.dart';
 import 'package:${objectGenerate.packageName}/${objectGenerate.import?.replaceAll("lib/", "")}';
-import 'package:${objectGenerate.packageName}/di/di.dart';
-import 'package:flutter_test/flutter_test.dart';
+
+import '../../../../mocks/index.dart';
+import '../../../../setup_repositories.dart';
+
+${hasRemoteDataSource ? 'class ${objectGenerate.name}RemoteDataSourceSpy extends Mock implements ${objectGenerate.name}RemoteDataSource {}' : ''}
+
+${hasLocalDataSource ? 'class ${objectGenerate.name}LocalDataSourceSpy extends Mock implements ${objectGenerate.name}LocalDataSource {}' : ''}
+
+class UserManagerMock extends Mock implements UserManager {}
 
 void main() {
-  ${objectGenerate.name}RepositoryImpl repo;
+
+  ${hasRemoteDataSource ? 'final remoteDataSource = ${objectGenerate.name}RemoteDataSourceSpy();' : ''}
+  ${hasLocalDataSource ? 'final localDataSource = ${objectGenerate.name}LocalDataSourceSpy();' : ''}
+  ${objectGenerate.name}RepositoryImplementation repository;
 
   setUp(() {
-    configureInjection();
-    repo = getIt();
+    initialRepositoriesSetup;
+    repository = ${objectGenerate.name}RepositoryImplementation(${hasRemoteDataSource ? 'remoteDataSource' : ''}${hasRemoteDataSource && hasLocalDataSource ? ',' : ''} ${hasLocalDataSource ? 'localDataSource' : ''});
   });
 
   test('${objectGenerate.name} repository implementation test', () async {});

@@ -150,19 +150,19 @@ class Generate {
     }
 
     await file_utils.createFile(
-      'domain/repositories/$name/$name',
+      'core/domain/repositories/$name/$name',
       name,
       'repository',
       templates.repositoryGenerator,
       generatorTest: null,
     );
     await file_utils.createFile(
-      'data/repositories/$name',
+      'core/data/repositories/$name',
       name,
       'repository_implementation',
       templates.repositoryImplGenerator,
       generatorTest:
-          haveTest ? templates.repositoryImplTestGeneratorClean : null,
+          haveTest ? templates.repositoryImplTestGenerator : null,
     );
   }
 
