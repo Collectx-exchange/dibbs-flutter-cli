@@ -21,16 +21,37 @@ void main() {
 
 String remoteDataSourceGeneratorTest(ObjectGenerate objectGenerate) => '''
 import 'package:${objectGenerate.packageName}/${objectGenerate.import?.replaceAll("lib/", "")}';
-import 'package:${objectGenerate.packageName}/di/di.dart';
-import 'package:flutter_test/flutter_test.dart';
+import 'package:graphql/client.dart';
+import 'package:mocktail/mocktail.dart';
+import 'package:test/test.dart';
+
+import '../../../../mocks/index.dart';
+
+class GraphQLClientMock extends Mock implements GraphQLClient {}
+
+class QueryOptionsMock extends Fake implements QueryOptions {}
+
+class MutationOptionsMock extends Fake implements MutationOptions {}
 
 void main() {
-  ${objectGenerate.name}RemoteDataSource dataSource;
+  late ${objectGenerate.name}RemoteDataSourceImplementation remoteDataSource;
+  final graphQlClient = GraphQLClientMock();
 
   setUp(() {
-    configureInjection();
-    dataSource = getIt();
+    remoteDataSource = ${objectGenerate.name}RemoteDataSourceImplementation(graphQlClient);
+    registerFallbackValue(QueryOptionsMock());
+    registerFallbackValue(MutationOptionsMock());
   });
+
+  final successfulResult = QueryResult(
+    data: {'test': 'test'},
+    source: QueryResultSource.network,
+  );
+
+  final failedResult = QueryResult(
+    source: QueryResultSource.network,
+    exception: OperationException(),
+  );
 
   test('${objectGenerate.name} remote_data_source test', () async {
     

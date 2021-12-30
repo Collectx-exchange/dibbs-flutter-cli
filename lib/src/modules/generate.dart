@@ -1,7 +1,6 @@
 import 'dart:io';
 
-import 'package:dibbs_flutter_cli/src/enums/data_source_enum.dart';
-import 'package:dibbs_flutter_cli/src/templates/generator/prompts/choose_data_source.dart';
+import 'package:dibbs_flutter_cli/src/templates/generator/prompts/create_data_source.dart';
 import 'package:dibbs_flutter_cli/src/templates/templates.dart' as templates;
 import 'package:dibbs_flutter_cli/src/utils/file_utils.dart' as file_utils;
 import 'package:dibbs_flutter_cli/src/utils/object_generate.dart';
@@ -10,6 +9,7 @@ import 'package:dibbs_flutter_cli/src/utils/utils.dart';
 import 'package:path/path.dart';
 
 import '../utils/utils.dart';
+import 'generate_data_sources.dart';
 import 'generate_page.dart';
 
 class Generate {
@@ -145,7 +145,8 @@ class Generate {
     bool haveTest = true,
     bool complete = false,
   }) async {
-    if (complete) {
+    final createDataSource = await chooseCreateDataSource();
+    if (createDataSource) {
       await dataSource(name);
     }
 
@@ -161,49 +162,8 @@ class Generate {
       name,
       'repository_implementation',
       templates.repositoryImplGenerator,
-      generatorTest:
-          haveTest ? templates.repositoryImplTestGenerator : null,
+      generatorTest: haveTest ? templates.repositoryImplTestGenerator : null,
     );
-  }
-
-  static Future<void> dataSource(String name,
-      {bool haveTest = true, String usage = ''}) async {
-    final dataSource = await chooseDataSource();
-
-    if (dataSource == DataSource.onlyLocal) {
-      await file_utils.createFile(
-        'data/data_sources/$name',
-        name,
-        'local_data_source',
-        templates.localDataSourceGenerator,
-        generatorTest: haveTest ? templates.localDataSourceGeneratorTest : null,
-      );
-    } else if (dataSource == DataSource.onlyRemote) {
-      await file_utils.createFile(
-        'data/data_sources/$name',
-        name,
-        'remote_data_source',
-        templates.remoteDataSourceGenerator,
-        generatorTest:
-            haveTest ? templates.remoteDataSourceGeneratorTest : null,
-      );
-    } else {
-      await file_utils.createFile(
-        'data/data_sources/$name',
-        name,
-        'local_data_source',
-        templates.localDataSourceGenerator,
-        generatorTest: haveTest ? templates.localDataSourceGeneratorTest : null,
-      );
-      await file_utils.createFile(
-        'data/data_sources/$name',
-        name,
-        'remote_data_source',
-        templates.remoteDataSourceGenerator,
-        generatorTest:
-            haveTest ? templates.remoteDataSourceGeneratorTest : null,
-      );
-    }
   }
 
   static Future<void> entity(String name, {String usage = ''}) async {

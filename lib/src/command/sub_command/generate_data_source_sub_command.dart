@@ -1,5 +1,5 @@
 import 'package:args/command_runner.dart';
-import 'package:dibbs_flutter_cli/src/modules/generate.dart';
+import 'package:dibbs_flutter_cli/src/modules/generate_data_sources.dart';
 
 import '../command_base.dart';
 
@@ -7,8 +7,7 @@ class GenerateDataSourceSubCommand extends CommandBase {
   @override
   final name = 'data_source';
   @override
-  final description =
-      'Creates the Data Sources files (Only for Clean Architecture)';
+  final description = 'Creates the Data Sources files';
 
   GenerateDataSourceSubCommand() {
     argParser.addFlag('notest',
@@ -22,7 +21,7 @@ class GenerateDataSourceSubCommand extends CommandBase {
     if (rest == null || rest.isEmpty) {
       throw UsageException('value not passed for Data Source command', usage);
     } else {
-      await Generate.dataSource(rest.first,
+      await dataSource(rest.first,
           haveTest: argResults != null && !argResults['notest'], usage: usage);
     }
     super.run();
