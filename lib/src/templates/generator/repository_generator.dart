@@ -24,7 +24,7 @@ class ${obj.name}Repository extends Disposable {
 }
   ''';
 
-String repositoryGeneratorClean(ObjectGenerate objectGenerate) {
+String repositoryGenerator(ObjectGenerate objectGenerate) {
   return '''
 abstract class ${objectGenerate.name}Repository {
   // TODO Write methods of ${objectGenerate.name}Repository
@@ -32,7 +32,7 @@ abstract class ${objectGenerate.name}Repository {
 ''';
 }
 
-String repositoryImplGeneratorClean(ObjectGenerate objectGenerate) {
+String repositoryImplGenerator(ObjectGenerate objectGenerate) {
   final nameSnaked = ReCase(objectGenerate.name).snakeCase;
   final haveIndexMapper = existsFile('data/mappers/index.dart');
   final haveLocalDataSource = existsFile(

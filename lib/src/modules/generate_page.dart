@@ -38,7 +38,6 @@ Future<void> page(String name) async {
 
   final createViewModel = await chooseCreatingViewModel;
 
-  //ToDo(): Create/Add test template
   if (createViewModel)
     await file_utils.createFile(
       root + name + '/view_model/',

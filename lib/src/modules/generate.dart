@@ -153,14 +153,14 @@ class Generate {
       'domain/repositories/$name/$name',
       name,
       'repository',
-      templates.repositoryGeneratorClean,
+      templates.repositoryGenerator,
       generatorTest: null,
     );
     await file_utils.createFile(
       'data/repositories/$name',
       name,
-      'repository_impl',
-      templates.repositoryImplGeneratorClean,
+      'repository_implementation',
+      templates.repositoryImplGenerator,
       generatorTest:
           haveTest ? templates.repositoryImplTestGeneratorClean : null,
     );
