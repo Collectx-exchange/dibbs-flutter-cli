@@ -77,15 +77,15 @@ bool checkParam(List<String> args, String param) {
 
 String libPath(String path, {bool reset = false}) {
   if (reset || _libPath == null) {
-    if (Directory("${mainDirectory}lib/src").existsSync()) {
-      _libPath = "${mainDirectory}lib/src";
-    } else if (Directory("${mainDirectory}lib/data").existsSync() &&
-        Directory("${mainDirectory}lib/domain").existsSync()) {
+    if (Directory("${mainDirectory}lib").existsSync()) {
+      _libPath = "${mainDirectory}lib";
+    } else if (Directory("${mainDirectory}lib/core/data").existsSync() &&
+        Directory("${mainDirectory}lib/core/domain").existsSync()) {
       _libPath = "${mainDirectory}lib";
     } else if (Directory("${mainDirectory}lib/app").existsSync()) {
       _libPath = "${mainDirectory}lib/app";
     } else {
-      _libPath = "${mainDirectory}lib/src";
+      _libPath = "${mainDirectory}lib";
     }
   }
   return "$_libPath/$path";

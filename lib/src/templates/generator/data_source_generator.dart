@@ -13,19 +13,11 @@ String localDataSourceImplementationGenerator(ObjectGenerate objectGenerate) {
   final nameSnaked = ReCase(objectGenerate.name).snakeCase;
 
   return '''
-import 'package:${objectGenerate.packageName}/core/data/helpers/storage_keys.dart';
-import 'package:${objectGenerate.packageName}/core/local/dibbs_preferences.dart';
 import '${nameSnaked}_local_data_source.dart';
 
 class ${objectGenerate.name}LocalDataSourceImplementation implements ${objectGenerate.name}LocalDataSource {
 
-  final SecureLocalStorage _localStorage;
-  final DibbsPreferences _preferences;
-
-  ${objectGenerate.packageName}LocalDataSourceImplementation(
-    this._localStorage,
-    this._preferences,
-  );
+  ${objectGenerate.name}LocalDataSourceImplementation();
 }
 ''';
 }

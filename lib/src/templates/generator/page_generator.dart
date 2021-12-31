@@ -26,7 +26,7 @@ class ${obj.name}Page extends GetView<${obj.name}Controller> {
 
   static Future? get navigateTo => Get.toNamed('');
 
-  const ${obj.name}Page({Key key}) : super(key: key);
+  const ${obj.name}Page({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) => Container();
@@ -44,7 +44,7 @@ class ${obj.name}Page extends GetView<${obj.name}Controller> {
   static Future? navigateWith({required ${obj.name}Arguments arguments}) => 
     Get.toNamed('', arguments: arguments);
 
-  const ${obj.name}Page({Key key}) : super(key: key);
+  const ${obj.name}Page({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) => Container();

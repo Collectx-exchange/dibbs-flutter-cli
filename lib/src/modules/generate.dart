@@ -97,8 +97,6 @@ class Generate {
     }
 
     final name = basename(entity.path);
-    final module = file_utils.findModule(entity.path);
-    final nameModule = module == null ? null : basename(module.path);
 
     if (name.contains('_repository.dart')) {
       entityTest.createSync(recursive: true);
@@ -109,8 +107,8 @@ class Generate {
             name: formatName(name.replaceFirst('_repository.dart', '')),
             packageName: await getNamePackage(),
             import: entity.path,
-            module: nameModule == null ? null : formatName(nameModule),
-            pathModule: module?.path,
+            module: null,
+            pathModule: null,
           ),
         ),
       );
@@ -123,8 +121,8 @@ class Generate {
             name: formatName(name.replaceFirst('_page.dart', '')),
             packageName: await getNamePackage(),
             import: entity.path,
-            module: nameModule == null ? null : formatName(nameModule),
-            pathModule: module?.path,
+            module: null,
+            pathModule: null,
           ),
         ),
       );
@@ -138,8 +136,8 @@ class Generate {
             type: 'controller',
             packageName: await getNamePackage(),
             import: entity.path,
-            module: nameModule == null ? null : formatName(nameModule),
-            pathModule: module?.path ?? "",
+            module: null,
+            pathModule: null,
           ),
         ),
       );
