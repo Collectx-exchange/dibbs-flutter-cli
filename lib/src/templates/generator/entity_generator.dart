@@ -12,7 +12,7 @@ class ${objectGenerate.name}Entity ${haveEquatable ? "extends Equatable " : ""}{
 
   final String param;
 
-  const ${objectGenerate.name}Entity();
+  const ${objectGenerate.name}Entity({required this.param});
 
   ${haveEquatable ? '''
   @override
@@ -22,7 +22,7 @@ class ${objectGenerate.name}Entity ${haveEquatable ? "extends Equatable " : ""}{
   @override
   String toString() => '${objectGenerate.name}Info()'; // TODO Write toString of ${objectGenerate.name}
   
-  ${objectGenerate.name}Entity copyWith({String param}) {
+  ${objectGenerate.name}Entity copyWith({String? param}) {
     return ${objectGenerate.name}Entity(
       param: param?? this.param
     );
@@ -39,38 +39,6 @@ class ${objectGenerate.name}Entity ${haveEquatable ? "extends Equatable " : ""}{
   //@override
   //int get hashCode => property.hashCode; // TODO hashCode overrides of ${objectGenerate.name}
   ''' : ""}
-}
-''';
-}
-
-String entityMapperGenerator(ObjectGenerate objectGenerate) {
-  final name = objectGenerate.name;
-  final nameSnaked = ReCase(name).snakeCase;
-  return '''
-import 'dart:convert';
-
-import 'package:${objectGenerate.packageName}/domain/entities/$nameSnaked/${nameSnaked}_entity.dart';
-
-extension ${name}Mapper on ${name}Entity{
-
-  Map<String, dynamic> toMap() {
-    return {
-      "param" : param
-    };
-  }
-
-  ${name}Entity fromMap(Map<String, dynamic> map) {
-    if (map == null) return null;
-
-    return ${name}Entity(
-      param: map["param"]
-    );
-  }
-
-  String toJson() => json.encode(toMap());
-
-  ${name}Entity fromJson(String source) => fromMap(json.decode(source));
-
 }
 ''';
 }

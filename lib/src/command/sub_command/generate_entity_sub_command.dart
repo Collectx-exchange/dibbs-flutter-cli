@@ -7,7 +7,7 @@ class GenerateEntitySubCommand extends CommandBase {
   @override
   final name = 'entity';
   @override
-  final description = 'Creates a entity (Only for Clean Architecture)';
+  final description = 'Creates a entity';
 
   GenerateEntitySubCommand();
 

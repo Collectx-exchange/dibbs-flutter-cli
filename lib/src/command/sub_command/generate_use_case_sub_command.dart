@@ -7,7 +7,7 @@ class GenerateUseCaseSubCommand extends CommandBase {
   @override
   final name = 'use_case';
   @override
-  final description = 'Creates a Use case (Only for Clean Architecture)';
+  final description = 'Creates a Use case';
 
   GenerateUseCaseSubCommand();
 

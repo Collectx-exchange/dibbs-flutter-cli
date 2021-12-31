@@ -1,6 +1,7 @@
 import 'package:args/args.dart';
 import 'package:args/command_runner.dart';
 import 'package:dibbs_flutter_cli/dibbs_flutter_cli.dart';
+import 'package:dibbs_flutter_cli/src/command/install_command.dart';
 
 void main(List<String> arguments) {
   final runner = configureCommand(arguments);
@@ -41,6 +42,7 @@ CommandRunner configureCommand(List<String> arguments) {
       CommandRunner('dibbs', 'CLI package manager and template for Flutter.')
         ..addCommand(RunCommand())
         ..addCommand(GenerateCommand())
+        ..addCommand(InstallCommand())
         ..addCommand(GenerateCommandAbbr())
         ..addCommand(UpgradeCommand())
         ..addCommand(RevertCommand());

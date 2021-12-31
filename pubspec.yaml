@@ -10,6 +10,7 @@ executables:
   dibbs: main
 
 dependencies:
+  equatable: ^2.0.3
   recase: ^4.0.0
   ansicolor: ^2.0.1
   http: ^0.13.4

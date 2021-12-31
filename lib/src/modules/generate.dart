@@ -1,6 +1,8 @@
 import 'dart:io';
 
+import 'package:dibbs_flutter_cli/src/enums/create_use_case_enums.dart';
 import 'package:dibbs_flutter_cli/src/templates/generator/prompts/create_data_source.dart';
+import 'package:dibbs_flutter_cli/src/templates/generator/prompts/create_use_case_prompt.dart';
 import 'package:dibbs_flutter_cli/src/templates/templates.dart' as templates;
 import 'package:dibbs_flutter_cli/src/utils/file_utils.dart' as file_utils;
 import 'package:dibbs_flutter_cli/src/utils/object_generate.dart';
@@ -37,7 +39,7 @@ class Generate {
       name,
       'widget',
       templates.widgetGenerator,
-      generatorTest: templates.widgetTestGenerator,
+      generatorTest: null,
     );
 
     if (withController) {
@@ -169,30 +171,37 @@ class Generate {
   static Future<void> entity(String name, {String usage = ''}) async {
     final haveEquatable = await checkDependency('equatable');
     await file_utils.createFile(
-      'domain/entities/$name',
+      'core/domain/entity/$name',
       name,
       'entity',
       templates.entityGenerator,
       generatorTest: null,
       additionalInfo: haveEquatable,
     );
-    await file_utils.createFile(
-      'data/mappers/$name',
-      name,
-      'mapper',
-      templates.entityMapperGenerator,
-      generatorTest: null,
-      additionalInfo: haveEquatable,
-    );
   }
 
   static Future<void> useCase(String name, {String usage = ''}) async {
-    await file_utils.createFile(
-      'domain/usecases/$name',
-      name,
-      'use_case',
-      templates.useCaseGenerator,
-      generatorTest: templates.useCaseTestGenerator,
-    );
+    final createUseCase = await createUseCasePrompt;
+
+    switch (createUseCase) {
+      case UseCaseParams.withParams:
+        await file_utils.createFile(
+          'core/domain/use_cases/$name',
+          name,
+          'use_case',
+          templates.useCaseWithParamsGenerator,
+          generatorTest: templates.useCaseTestGenerator,
+        );
+        break;
+      case UseCaseParams.withoutParams:
+        await file_utils.createFile(
+          'core/domain/use_cases/$name',
+          name,
+          'use_case',
+          templates.useCaseGenerator,
+          generatorTest: templates.useCaseTestGenerator,
+        );
+        break;
+    }
   }
 }

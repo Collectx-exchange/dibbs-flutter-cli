@@ -74,7 +74,13 @@ void main() {
     repository = ${objectGenerate.name}RepositoryImplementation(${hasRemoteDataSource ? 'remoteDataSource' : ''}${hasRemoteDataSource && hasLocalDataSource ? ',' : ''} ${hasLocalDataSource ? 'localDataSource' : ''});
   });
 
-  test('${objectGenerate.name} repository implementation test', () async {});
+  test('${objectGenerate.name} repository implementation test', () async {
+    //arrange
+    
+    //act
+    
+    //assert
+  });
 }
 
 ''';
