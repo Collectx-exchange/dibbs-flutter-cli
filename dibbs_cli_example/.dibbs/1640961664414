@@ -1,0 +1,2 @@
+lib/core/domain/use_cases/my_use_case/my_use_case_use_case.dart
+test/core/domain/use_cases/my_use_case/my_use_case_use_case_test.dart

@@ -1,0 +1,8 @@
+lib/core/data/data_sources/my_repo/local/my_repo_local_data_source.dart
+lib/core/data/data_sources/my_repo/local/my_repo_local_data_source_implementation.dart
+lib/core/data/data_sources/my_repo/remote/my_repo_remote_data_source_implementation.dart
+lib/core/data/data_sources/my_repo/remote/my_repo_remote_data_source.dart
+test/core/data/data_sources/my_repo/remote/my_repo_remote_data_source_test.dart
+lib/core/domain/repositories/my_repo/my_repo_repository.dart
+lib/core/data/repositories/my_repo/my_repo_repository_implementation.dart
+test/core/data/repositories/my_repo/my_repo_repository_implementation_test.dart

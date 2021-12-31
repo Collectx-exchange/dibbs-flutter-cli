@@ -1,0 +1,6 @@
+lib/app/pages/my_page/my_page_page.dart
+lib/app/pages/my_page/arguments/my_page_arguments.dart
+lib/app/pages/my_page/view_model/my_page_view_model.dart
+lib/app/pages/my_page/adapter/my_page_adapter.dart
+lib/app/pages/my_page/my_page_controller.dart
+lib/app/pages/my_page/bindings/my_page_bindings.dart
