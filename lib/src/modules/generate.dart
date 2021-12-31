@@ -1,3 +1,5 @@
+import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:dibbs_flutter_cli/src/enums/create_use_case_enums.dart';
@@ -28,6 +30,7 @@ class Generate {
     if (createCompleteFeature) {
       await page(name);
     }
+    await _formatFiles;
   }
 
   static Future<void> widget(
@@ -45,8 +48,10 @@ class Generate {
     if (withController) {
       var type = 'controller';
 
-      return controller('$path/$name', name, type, haveTest: true);
+      await controller('$path/$name', name, type, haveTest: true);
     }
+
+    await _formatFiles;
   }
 
   static Future<void> test(String path) async {
@@ -58,7 +63,7 @@ class Generate {
         output.error('File $path not exist');
         exit(1);
       }
-      return _generateTest(
+      await _generateTest(
           entity,
           File(libPath(path)
               .replaceFirst('lib/', 'test/')
@@ -139,6 +144,7 @@ class Generate {
         ),
       );
     }
+    await _formatFiles;
   }
 
   static Future<void> repository(
@@ -166,6 +172,7 @@ class Generate {
       templates.repositoryImplGenerator,
       generatorTest: haveTest ? templates.repositoryImplTestGenerator : null,
     );
+    await _formatFiles;
   }
 
   static Future<void> entity(String name, {String usage = ''}) async {
@@ -178,6 +185,7 @@ class Generate {
       generatorTest: null,
       additionalInfo: haveEquatable,
     );
+    await _formatFiles;
   }
 
   static Future<void> useCase(String name, {String usage = ''}) async {
@@ -203,5 +211,31 @@ class Generate {
         );
         break;
     }
+    await _formatFiles;
+  }
+
+  static Future<bool> get _formatFiles async {
+    final finished = Completer<bool>();
+    final process = await Process.start(
+      'flutter',
+      [
+        'format',
+        '--line-length 100',
+        './lib/app/',
+        './lib/core/',
+        './lib/main.dart',
+        './lib/main_dev.dart',
+        './lib/init_core_modules.dart',
+        './test'
+      ],
+      runInShell: true,
+    );
+    process.stdout.transform(utf8.decoder).listen(
+          print,
+          cancelOnError: false,
+          onDone: () => finished.complete(true),
+          onError: (e) => finished.complete(true),
+        );
+    return finished.future;
   }
 }
