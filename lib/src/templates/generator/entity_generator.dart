@@ -1,5 +1,4 @@
 import 'package:dibbs_flutter_cli/src/utils/object_generate.dart';
-import 'package:recase/recase.dart';
 
 String entityGenerator(ObjectGenerate objectGenerate) {
   bool haveEquatable = objectGenerate.additionalInfo;

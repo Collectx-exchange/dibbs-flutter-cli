@@ -38,7 +38,7 @@ Future<void> page(String name) async {
 
   final createViewModel = await chooseCreatingViewModel;
 
-  if (createViewModel)
+  if (createViewModel) {
     await file_utils.createFile(
       root + name + '/view_model/',
       name,
@@ -46,11 +46,12 @@ Future<void> page(String name) async {
       templates.viewModelGenerator,
       generatorTest: null,
     );
+  }
 
   final createAdapter = await chooseCreatingAdapter;
 
   //ToDo(): Create/Add test template
-  if (createAdapter)
+  if (createAdapter) {
     await file_utils.createFile(
       root + name + '/adapter/',
       name,
@@ -58,6 +59,7 @@ Future<void> page(String name) async {
       templates.adapterGenerator,
       generatorTest: null,
     );
+  }
 
   await controller(root + name, name, 'controller');
   await bindings(root + name + '/bindings/', name, 'bindings');

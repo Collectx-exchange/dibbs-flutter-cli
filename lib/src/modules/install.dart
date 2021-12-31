@@ -42,7 +42,9 @@ Future<void> install(List<String> packs, bool isDev,
       packName = pack;
     }
 
-    if (dependencies != null && dependencies.containsKey(packName) && !haveTwoLines) {
+    if (dependencies != null &&
+        dependencies.containsKey(packName) &&
+        !haveTwoLines) {
       await update([packName], isDev);
       continue;
     }

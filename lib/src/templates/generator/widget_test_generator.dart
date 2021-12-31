@@ -1,8 +1,8 @@
-
 import 'package:dibbs_flutter_cli/src/utils/object_generate.dart';
 
 String widgetTestGenerator(ObjectGenerate obj) {
-  var package = r"import 'package:flutter_modular_test/flutter_modular_test.dart'";
+  var package =
+      r"import 'package:flutter_modular_test/flutter_modular_test.dart'";
 
   return '''
 import 'package:flutter/material.dart';

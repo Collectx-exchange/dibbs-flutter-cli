@@ -1,4 +1,3 @@
-
 import 'command_base.dart';
 import 'sub_command/generate_controller.dart';
 import 'sub_command/generate_data_source_sub_command.dart';

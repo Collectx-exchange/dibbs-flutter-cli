@@ -1,6 +1,1 @@
-enum UseCaseParams {
-
-  withParams,
-  withoutParams
-
-}
+enum UseCaseParams { withParams, withoutParams }

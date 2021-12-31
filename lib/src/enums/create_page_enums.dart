@@ -1,6 +1,1 @@
-
-enum PageNavigation {
-
-  withArguments, withoutArguments
-
-}
+enum PageNavigation { withArguments, withoutArguments }

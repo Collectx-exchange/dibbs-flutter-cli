@@ -11,7 +11,7 @@ class GeneratePageSubCommand extends CommandBase {
   @override
   final description = 'Creates a page';
 
- /* GeneratePageSubCommand() {
+  /* GeneratePageSubCommand() {
     argParser.addFlag('controller',
         abbr: 'c',
         negatable: false,

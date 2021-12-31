@@ -1,4 +1,3 @@
-
 class ObjectGenerate {
   final String name;
   final String packageName;
