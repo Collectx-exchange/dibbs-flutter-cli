@@ -1,5 +1,5 @@
 Future<String> _getVersion() async {
-  return '1.0.2';
+  return '1.0.3';
 }
 
 void version() async {

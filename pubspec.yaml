@@ -1,6 +1,6 @@
 name: dibbs_flutter_cli
 description: A starting point for Dart libraries or applications.
-version: 1.0.2
+version: 1.0.3
 repository: https://github.com/denisviana/dibbs_flutter_cli
 
 environment:
@@ -20,6 +20,8 @@ dependencies:
   dart_console: ^1.0.0
   tuple: ^2.0.0
   pubspec_yaml: ^3.1.0
+  fhir_yaml: ^0.5.2
+  rxdart: ^0.27.3
 
 dev_dependencies:
   test: ^1.20.1

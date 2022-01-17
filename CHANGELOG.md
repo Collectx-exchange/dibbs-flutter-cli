@@ -1,3 +1,8 @@
+## 1.0.3
+
+- Remove the Format Files function after calling the generating command
+- Improvements in the Run command
+
 ## 1.0.2
 
 - Fix page template and Data Source template

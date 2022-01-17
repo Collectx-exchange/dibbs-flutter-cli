@@ -30,7 +30,6 @@ class Generate {
     if (createCompleteFeature) {
       await page(name);
     }
-    await _formatFiles;
   }
 
   static Future<void> widget(
@@ -50,8 +49,6 @@ class Generate {
 
       await controller('$path/$name', name, type, haveTest: true);
     }
-
-    await _formatFiles;
   }
 
   static Future<void> test(String path) async {
@@ -142,7 +139,6 @@ class Generate {
         ),
       );
     }
-    await _formatFiles;
   }
 
   static Future<void> repository(
@@ -170,7 +166,6 @@ class Generate {
       templates.repositoryImplGenerator,
       generatorTest: haveTest ? templates.repositoryImplTestGenerator : null,
     );
-    await _formatFiles;
   }
 
   static Future<void> entity(String name, {String usage = ''}) async {
@@ -183,7 +178,6 @@ class Generate {
       generatorTest: null,
       additionalInfo: haveEquatable,
     );
-    await _formatFiles;
   }
 
   static Future<void> useCase(String name, {String usage = ''}) async {
@@ -209,23 +203,13 @@ class Generate {
         );
         break;
     }
-    await _formatFiles;
   }
 
-  static Future<bool> get _formatFiles async {
+  static Future<bool> _formatFiles(String path) async {
     final finished = Completer<bool>();
     final process = await Process.start(
       'flutter',
-      [
-        'format',
-        '--line-length 100',
-        './lib/app/',
-        './lib/core/',
-        './lib/main.dart',
-        './lib/main_dev.dart',
-        './lib/init_core_modules.dart',
-        './test'
-      ],
+      ['format', '--line-length 100', path, './test'],
       runInShell: true,
     );
     process.stdout.transform(utf8.decoder).listen(
