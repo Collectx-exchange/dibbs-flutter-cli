@@ -70,8 +70,7 @@ class RunCommand extends CommandBase {
     final argResults = this.argResults;
     var yaml = File('pubspec.yaml');
     var node = yaml.readAsStringSync();
-    final doc = loadYaml(node);
-    PubspecYaml pubspec = PubspecYaml.loadFromYamlString(doc);
+    PubspecYaml pubspec = PubspecYaml.loadFromYamlString(node);
 
     Map<String, dynamic> scripts;
     try {

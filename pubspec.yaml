@@ -1,6 +1,6 @@
 name: dibbs_flutter_cli
 description: A starting point for Dart libraries or applications.
-version: 1.0.3
+version: 1.0.4
 repository: https://github.com/denisviana/dibbs_flutter_cli
 
 environment:
@@ -26,3 +26,14 @@ dependencies:
 dev_dependencies:
   test: ^1.20.1
   pedantic: ^1.11.1
+
+vars:
+  format_files: flutter format --line-length 100 ./lib/app/ ./lib/core/ ./lib/main.dart ./lib/main_dev.dart ./lib/init_core_modules.dart ./test
+  analyze: flutter analyze .
+  run_tests: flutter tests
+  push: git push
+
+scripts:
+  format: $format_files
+  build_runner: flutter pub run build_runner build --delete-conflicting-outputs
+  git_push: $format_files & $analyze & $run_tests & $push

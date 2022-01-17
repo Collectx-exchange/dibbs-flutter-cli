@@ -1,3 +1,7 @@
+## 1.0.4
+
+- Fix Run command
+
 ## 1.0.3
 
 - Remove the Format Files function after calling the generating command
