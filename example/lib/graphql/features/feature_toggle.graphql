@@ -1,0 +1,6 @@
+query FeatureToggles {
+  features {
+    asset_withdraw_on_trading
+    intercom
+  }
+}

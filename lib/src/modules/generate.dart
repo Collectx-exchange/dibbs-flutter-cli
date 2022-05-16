@@ -11,10 +11,14 @@ import 'package:dibbs_flutter_cli/src/utils/object_generate.dart';
 import 'package:dibbs_flutter_cli/src/utils/output_utils.dart' as output;
 import 'package:dibbs_flutter_cli/src/utils/utils.dart';
 import 'package:path/path.dart';
+import 'package:recase/recase.dart';
 
 import '../utils/utils.dart';
 import 'generate_data_sources.dart';
 import 'generate_page.dart';
+import 'graphql_mock_generator/generate_graphql_json_mocks.dart';
+
+JsonEncoder encoder = JsonEncoder.withIndent('  ');
 
 class Generate {
   static Future<void> feature(
@@ -32,8 +36,7 @@ class Generate {
     }
   }
 
-  static Future<void> widget(
-      String path, String name, bool withController) async {
+  static Future<void> widget(String path, String name, bool withController) async {
     final path = 'app/' + name;
 
     await file_utils.createFile(
@@ -60,11 +63,8 @@ class Generate {
         output.error('File $path not exist');
         exit(1);
       }
-      await _generateTest(
-          entity,
-          File(libPath(path)
-              .replaceFirst('lib/', 'test/')
-              .replaceFirst('.dart', '_test.dart')));
+      await _generateTest(entity,
+          File(libPath(path).replaceFirst('lib/', 'test/').replaceFirst('.dart', '_test.dart')));
     } else {
       var entity = Directory(libPath(path));
       if (!entity.existsSync()) {
@@ -77,9 +77,7 @@ class Generate {
           await _generateTest(
             file,
             File(
-              file.path
-                  .replaceFirst('lib/', 'test/')
-                  .replaceFirst('.dart', '_test.dart'),
+              file.path.replaceFirst('lib/', 'test/').replaceFirst('.dart', '_test.dart'),
             ),
           );
         }
@@ -205,19 +203,100 @@ class Generate {
     }
   }
 
-  static Future<bool> _formatFiles(String path) async {
-    final finished = Completer<bool>();
-    final process = await Process.start(
-      'flutter',
-      ['format', '--line-length 100', path, './test'],
-      runInShell: true,
-    );
-    process.stdout.transform(utf8.decoder).listen(
-          print,
-          cancelOnError: false,
-          onDone: () => finished.complete(true),
-          onError: (e) => finished.complete(true),
+  static Future<void> graphQlJsonMock({required String docPath, required String path}) async {
+    output.msg('Creating GraphQL Json Mock for file $docPath');
+    try {
+      final rootPath = docPath.substring(0, docPath.indexOf('/lib'));
+      mainDirectory = rootPath;
+      final entity = await generateGraphQLJsonMock(docPath: docPath);
+
+      final file = File('$rootPath/test/mocks/graphql_json_mocks.dart');
+      final name = '${ReCase(entity.name).camelCase}Mock';
+
+      if (!file.existsSync()) {
+        file.createSync(recursive: true);
+        file.writeAsStringSync(
+          templates.graphQlJsonMockGenerator(
+            ObjectGenerate(
+              name: name,
+              type: 'mock',
+              packageName: await getNamePackage(),
+              additionalInfo: entity.data,
+            ),
+          ),
         );
-    return finished.future;
+      } else {
+        final content = file.readAsStringSync();
+        if (content.contains(name)) {
+          output.error("A function $name already exists in this file");
+          return;
+        } else {
+          file.writeAsStringSync(
+            templates.graphQlJsonMockGenerator(
+              ObjectGenerate(
+                name: name,
+                type: 'mock',
+                packageName: await getNamePackage(),
+                additionalInfo: entity.data,
+              ),
+            ),
+            mode: FileMode.append,
+          );
+          output.success('$name created');
+          output.success(encoder.convert(entity.data));
+        }
+      }
+    } on Exception catch (e) {
+      output.error(e.toString());
+    }
+  }
+}
+
+void main() async {
+  final docPath =
+      '/Users/denisviana/AndroidStudioProjects/dibbs_flutter_cli/lib/feature_toggle.graphql';
+  output.msg('Creating GraphQL Json Mock for file $docPath');
+  try {
+    final rootPath = docPath.substring(0, docPath.indexOf('/lib'));
+    mainDirectory = rootPath;
+    final entity = await generateGraphQLJsonMock(docPath: docPath);
+
+    final file = File('$rootPath/test/mocks/graphql_json_mocks.dart');
+
+    if (!file.existsSync()) {
+      final name = '${ReCase(entity.name).camelCase}Mock';
+      file.createSync(recursive: true);
+      file.writeAsStringSync(
+        templates.graphQlJsonMockGenerator(
+          ObjectGenerate(
+            name: name,
+            type: 'mock',
+            packageName: await getNamePackage(),
+            additionalInfo: entity.data,
+          ),
+        ),
+      );
+    } else {
+      final content = file.readAsStringSync();
+      final name = '${ReCase(entity.name).camelCase}Mock';
+      if (content.contains(name)) {
+        output.error("A function $name already exists in this file");
+        return;
+      } else {
+        file.writeAsStringSync(
+          templates.graphQlJsonMockGenerator(
+            ObjectGenerate(
+              name: name,
+              type: 'mock',
+              packageName: await getNamePackage(),
+              additionalInfo: entity.data,
+            ),
+          ),
+          mode: FileMode.append,
+        );
+      }
+    }
+  } on Exception catch (e) {
+    output.error(e.toString());
   }
 }

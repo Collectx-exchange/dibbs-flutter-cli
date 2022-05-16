@@ -1,3 +1,5 @@
+import 'package:dibbs_flutter_cli/src/command/sub_command/generate_graphql_json_mock_sub_command.dart';
+
 import 'command_base.dart';
 import 'sub_command/generate_controller.dart';
 import 'sub_command/generate_data_source_sub_command.dart';
@@ -13,7 +15,7 @@ class GenerateCommand extends CommandBase {
   final name = 'generate';
   @override
   final description =
-      'Creates a feature, page, widget or repository according to the option.';
+      'Creates a feature, page, widget, repository or graphql json mock according to the option.';
   final abbr = 'g';
 
   GenerateCommand() {
@@ -33,6 +35,8 @@ class GenerateCommand extends CommandBase {
     addSubcommand(GenerateEntityAbbrSubCommand());
     addSubcommand(GenerateUseCaseSubCommand());
     addSubcommand(GenerateUseCaseAbbrSubCommand());
+    addSubcommand(GenerateGraphQLJsonMockSubCommand());
+    addSubcommand(GenerateGraphQLJsonMockAbbrSubCommand());
   }
 }
 

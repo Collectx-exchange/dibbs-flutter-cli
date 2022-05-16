@@ -6,7 +6,6 @@ import 'package:args/command_runner.dart';
 import 'package:dart_console/dart_console.dart';
 import 'package:pubspec_yaml/pubspec_yaml.dart';
 import 'package:rxdart/rxdart.dart';
-import 'package:yaml/yaml.dart';
 
 import '../../dibbs_flutter_cli.dart';
 import '../utils/output_utils.dart' as output;
@@ -89,13 +88,11 @@ class RunCommand extends CommandBase {
       // ignore: empty_catches
     } catch (e) {}
 
-    final commands = argResults?.rest.isNotEmpty == true
-        ? List<String>.from(argResults!.rest)
-        : <String>[];
+    final commands =
+        argResults?.rest.isNotEmpty == true ? List<String>.from(argResults!.rest) : <String>[];
 
     if (commands.isEmpty) {
-      final command =
-          stateCLIOptions('Select a command', scripts.keys.toList().cast());
+      final command = stateCLIOptions('Select a command', scripts.keys.toList().cast());
       if (command != null) {
         commands.add(command);
       }
@@ -107,8 +104,7 @@ class RunCommand extends CommandBase {
     return runCommand(commands, scripts, vars);
   }
 
-  Future<void> runCommand(
-      List<String> commands, Map<String, dynamic> scripts, Map vars) async {
+  Future<void> runCommand(List<String> commands, Map<String, dynamic> scripts, Map vars) async {
     for (var command in commands) {
       var regex = RegExp("[^\\s\'']+|\'[^\']*\'|'[^']*'");
       var regexVar = RegExp(r'\$([a-zA-Z0-9]+)');
@@ -126,8 +122,7 @@ class RunCommand extends CommandBase {
         if (match.groupCount != 0) {
           var variable = match.group(0)?.replaceFirst('\$', '');
           if (variable != null && vars.containsKey(variable)) {
-            commandExec = commandExec.replaceAll(
-                match.group(0) ?? '', vars[variable] ?? '');
+            commandExec = commandExec.replaceAll(match.group(0) ?? '', vars[variable] ?? '');
           }
         }
       }
@@ -137,8 +132,7 @@ class RunCommand extends CommandBase {
             .allMatches(item)
             .map((v) => v.group(0)!)
             .toList()
-            .map<String>((e) =>
-                (e.startsWith('\$') ? vars[e.replaceFirst('\$', '')] ?? e : e))
+            .map<String>((e) => (e.startsWith('\$') ? vars[e.replaceFirst('\$', '')] ?? e : e))
             .toList();
         await callProcess(matchList);
       }
@@ -147,11 +141,8 @@ class RunCommand extends CommandBase {
 
   Future callProcess(List<String> commands) async {
     try {
-      var process = await Process.start(
-          commands.first,
-          commands.length <= 1
-              ? []
-              : commands.getRange(1, commands.length).toList(),
+      var process = await Process.start(commands.first,
+          commands.length <= 1 ? [] : commands.getRange(1, commands.length).toList(),
           runInShell: true);
 
       final error = process.stderr.transform(utf8.decoder).map(output.red);
@@ -164,9 +155,11 @@ class RunCommand extends CommandBase {
         output.success(commands.join(' '));
       } else {
         output.error(commands.join(' '));
+        exit(await process.exitCode);
       }
     } catch (error) {
       output.error(commands.join(' '));
+      exit(1);
     }
   }
 }

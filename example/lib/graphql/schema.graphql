@@ -1,0 +1,2791 @@
+# big number
+scalar GraphQlBigNumber
+
+# UUID4
+scalar UUID4
+
+# UnixTimeSeconds
+scalar UnixTimeSeconds
+
+# UnixTimeMilliSeconds
+scalar UnixTimeMilliSeconds
+
+# ImageUrl
+scalar ImageUrl
+
+scalar Upload
+
+# StringLowerCase
+scalar StringLowerCase
+
+# StringUpperCase
+scalar StringUpperCase
+
+scalar JSONObject
+
+scalar Markdown
+
+type Query {
+  current_user: CurrentUser
+  temp_user: String
+  news(count: Int, offset: Int): [NewsItem!]!
+  carousel(count: Int, offset: Int): [CarouselItem!]!
+  assets(
+    count: Int
+    offset: Int
+    sport_id: Int
+    sort: String
+    search: String
+  ): [Asset!]!
+  players(
+    count: Int
+    offset: Int
+    filter: String
+    sort: String
+    sport_id: Int
+    search: String
+  ): [Player!]!
+  pairs(sport_id: Int, count: Int, offset: Int, sort: String): [Pair!]!
+  sports(count: Int, offset: Int): [Sport!]!
+  educational_articles(count: Int, offset: Int): [EducationalArticle!]!
+  search(
+    count: Int
+    offset: Int
+    filter: SearchFilter
+    query: String
+  ): [SearchResult!]!
+  pair(pair: StringUpperCase!): Pair!
+  player(id: Int, id_hr: StringLowerCase): Player!
+  player_buy_distribution(
+    player_id_hr: StringLowerCase
+    amount_usd: GraphQlBigNumber
+  ): PlayerBuyDistribution!
+  player_sell_distribution(
+    player_id_hr: StringLowerCase!
+    percentage: GraphQlBigNumber!
+  ): PlayerSellDistribution!
+  get_shipments: [Shipment!]!
+  buy_estimate(
+    pair: StringUpperCase!
+    amount: GraphQlBigNumber!
+    limit: GraphQlBigNumber
+  ): Estimate!
+  sell_estimate(
+    pair: StringUpperCase!
+    amount: GraphQlBigNumber!
+    limit: GraphQlBigNumber
+  ): Estimate!
+  buy_estimate_v2(
+    pair: StringUpperCase!
+    usd_purchased: GraphQlBigNumber
+    card_amount_fraction: GraphQlBigNumber
+    card_buy_price: GraphQlBigNumber
+  ): EstimateBuy!
+  sell_estimate_v2(
+    pair: StringUpperCase!
+    usd_sold: GraphQlBigNumber
+    card_amount_fraction: GraphQlBigNumber
+    card_sell_price: GraphQlBigNumber
+  ): EstimateSell!
+  amplitude_events: String!
+  iterable_events: String!
+  launchdarkly_events: String!
+  branch_events: String!
+  facebook_events: String!
+  reddit_events: String!
+  snapchat_events: String!
+  tiktok_events: String!
+  debug_local_instance: Int
+  pending_drops: [Wax!]!
+  drops(count: Int, offset: Int, filter: String): [Drop!]!
+  drop(drop_id: Int!): Drop!
+  debug_cf_headers: DebugCfHeaders!
+  landingpage_position(check_code: String!): LandingPagePosition
+  available_kyc_countries: [String!]!
+  onboarding_sequence: [OnboardingSequenceItem!]!
+  market_chart(
+    end_time_seconds: Float
+    window: Int
+    resolution: String
+  ): [ChartItem!]!
+  notification_center: [NotificationCenterChannelGroup!]!
+  internal_get_user(account_email: String!): CurrentUser!
+  internal_get_user_by_id(account_id: UUID4!): CurrentUser_or_Error
+  internal_get_tooltips: [ToolTip]!
+  internal_get_buy_sell_presets(key: String!): [Float!]
+  internal_get_users_migration_status_from_primetrust_to_socure: [SocureMigrationStatus!]!
+  internal_get_cs_notes(user_id: UUID4!): [Internal_CSNote!]!
+  internal_get_circle_funds(account_id: UUID4!): GraphQlBigNumber!
+  internal_get_circle_payment(
+    payment_id: UUID4
+    circle_id: String
+  ): CirclePayment_API_and_Internal!
+  internal_get_circle_transfer(circle_id: String!): CircleTransfer_or_Error!
+  internal_get_circle_payments(
+    account_id: UUID4!
+    limit: Int
+    offset: Int
+  ): [CirclePayment!]!
+  internal_get_circle_withdrawals(
+    account_id: UUID4
+    status: CircleWithdrawalStatus
+  ): [CircleWithdrawal!]!
+  internal_get_transfer_money_to_user_logs(index: Int!): [AdminLog]!
+  internal_get_in_app_banners: [InAppBanner!]!
+  internal_get_user_kyc_info(email: String!): UserKycInformation_or_Error!
+  internal_get_user_duplicate_kyc_data(email: String!): [UserKycInformation!]!
+  internal_get_user_kyc_attempts(email: String!): [UserKycAttempt!]!
+  internal_get_user_kyc_callbacks(account_id: UUID4!): [KycCallback!]!
+  internal_get_kyc_info_by_level_status(
+    level_status: [KycLevelStatusRetoolFilter!]!
+  ): [UserKycState_or_Error!]!
+  internal_referral_list_user_campaign: [ReferralUserCampaignId!]!
+  internal_kyc_user_level(email: String!): UserKycState_or_Error!
+  internal_admin_logs_list(account_id: UUID4): [InternalAdminLog!]!
+  human_error_messages(language: String!): [LanguageEntry!]!
+  human_error_message_single(language: String!, error_code: String!): String!
+  config: Config!
+  version: String!
+  features: Features!
+  fracpacks: [FracpackDefinition!]!
+  fracpack(id_hr: String!): FracpackDefinition
+  limit_buy_presets: [Int!]!
+  limit_sell_presets: [Float!]!
+  market_buy_presets(
+    pair: StringUpperCase!
+    usd_custom_input: Float
+  ): EstimateBuyArray_or_Error!
+  market_sell_presets(
+    pair: StringUpperCase!
+    max_card_amount: Float!
+    custom_percentage_input: Float
+  ): EstimateSellArray_or_Error!
+  get_tooltips(keys: [String!]!): [ToolTip]!
+  get_wire_instructions(wire_id: UUID4!): CircleWireInstruction_or_Error!
+  get_socure_kyc_levels: [KycLevelDefinition!]!
+  circle_available_deposit_chains: [CircleChains!]!
+  circle_available_withdrawal_chains: [CircleChains!]!
+  internal_get_user_proof_of_address_image(account_id: UUID4!): String!
+  internal_get_proof_of_banking_images(
+    proof_of_banking_id: UUID4!
+  ): InternalProofOfBankingImages_or_Error!
+  get_rewards_shop_items: RewardsShop!
+  internal_list_campaigns(offset: Int, limit: Int): [Campaign!]!
+  internal_get_user_fraud(account_id: UUID4!): UserFraud_or_Error!
+  internal_get_drops: [InternalDrop!]!
+  internal_rewards_shop_get_items: [InternalRewardsShopItem!]!
+}
+
+type UserFraud {
+  total_transactions: Int!
+  recent_transactions: Int!
+  drops_all_t_avg: GraphQlBigNumber!
+  drops_all_t_sum: GraphQlBigNumber!
+  drops_all_t_count: Int!
+  drops_recent_avg: GraphQlBigNumber!
+  drops_recent_sum: GraphQlBigNumber!
+  drops_recent_count: Int!
+  trades_recent_avg: GraphQlBigNumber!
+  trades_recent_sum: GraphQlBigNumber!
+  trades_recent_count: Int!
+  devices: [String!]!
+}
+
+union UserFraud_or_Error = UserFraud | DibbsError
+
+type Internal_CSNote {
+  id: UUID4!
+  user_id: UUID4!
+  note: String!
+  created_by: UUID4!
+  created_at: UnixTimeSeconds!
+}
+
+type Campaign {
+  id: UUID4!
+  prefix: String!
+  name: String!
+  image: String!
+  description: String
+  max_value: Int!
+  average_value: Int!
+  max_redemptions_per_user: Int!
+  ends_at: UnixTimeSeconds
+  created_at: UnixTimeSeconds
+  min_value: Int!
+  refcode: String
+  on_signup: Boolean
+}
+
+type InternalAdminLog {
+  id: UUID4!
+  value_is: String!
+  value_was: String!
+  admin_email: String!
+  created_at: String!
+  account_id: UUID4
+  account_email: String
+}
+
+enum CircleTransferType {
+  blockchain
+  wallet
+  ach
+  card
+  wire
+}
+
+type CircleMoney {
+  amount: String!
+  currency: String!
+}
+
+type CirclePaymentMetaData {
+  email: String!
+  phoneNumber: String
+}
+
+type CirclePaymentRequiredAction {
+  type: String!
+  redirectUrl: String!
+}
+
+type CircleRiskEvaluation {
+  decision: String!
+  reason: String!
+}
+
+type CircleApiPayment {
+  id: String!
+  merchantId: String!
+  merchantWalletId: String!
+  amount: CircleMoney!
+  source: JSONObject!
+  description: String!
+  status: CirclePaymentStatus!
+  verificiation: JSONObject
+  cancel: JSONObject
+  refunds: [JSONObject!]!
+  fees: CircleMoney
+  trackingRef: String
+  errorCode: String
+  metadata: CirclePaymentMetaData!
+  requiredAction: CirclePaymentRequiredAction
+  riskEvaluation: CircleRiskEvaluation!
+  createDate: String!
+  updateDate: String!
+}
+
+type CirclePayment_API_and_Internal {
+  circleApiPayment: CircleApiPayment
+  circlePayment: CirclePayment_or_Error
+}
+
+enum CircleTransferStatus {
+  pending
+  complete
+  failed
+}
+
+type CircleTransfer {
+  id: String!
+  source: JSONObject!
+  destination: JSONObject!
+  amount: CircleMoney!
+  transactionHash: String
+  status: CircleTransferStatus!
+  riskEvaluation: CircleRiskEvaluation
+  createDate: String!
+}
+
+union CircleTransfer_or_Error = CircleTransfer | DibbsError
+
+type SocureDocument {
+  id: UUID4!
+}
+
+type UUID4Array {
+  values: [UUID4!]!
+}
+
+type ReferralUserCampaignId {
+  user: UserInfo!
+  user_id: UUID4!
+  campaign_id: String!
+}
+
+type ToolTip {
+  key: String!
+  title: String!
+  title_short: String!
+  body: String
+  learn_more: String
+}
+
+type AdminLog {
+  index: Int!
+  admin_account_id: UUID4!
+  admin_email: String!
+  info: JSONObject!
+  time_added: UnixTimeMilliSeconds!
+}
+
+type OnboardingSequenceItem {
+  id: Int
+  image: String!
+  title: String!
+  subtext: String!
+  button_caption: String!
+  active: Boolean!
+  order_weight: GraphQlBigNumber!
+}
+
+type KycEmailType {
+  type_id: String!
+  type_text: String!
+}
+
+type Shipment {
+  id: UUID4!
+  account_id: UUID4!
+  account_shipment_method: UUID4!
+  asset_id: Int!
+  asset_submission_id: Int
+  wax_asset_id: String
+  tx_wax_withdraw: String
+  tx_wax_burn: String
+  tx_wax_transfer: String
+  status: String!
+  note: String
+  time_created: String
+  time_last_update: String
+  time_sent: String
+}
+
+type Config {
+  buy_min_amount_usd: GraphQlBigNumber!
+  sell_min_amount_usd: GraphQlBigNumber!
+}
+
+type LanguageEntry {
+  key: String!
+  value: String!
+}
+
+type HowMuchCanStillBeDeposited {
+  credit_card_daily_limit: GraphQlBigNumber!
+  credit_card_instant_daily_limit: GraphQlBigNumber!
+  credit_card_weekly_limit: GraphQlBigNumber!
+  credit_card_instant_weekly_limit: GraphQlBigNumber!
+  wire_daily_limit: GraphQlBigNumber!
+  wire_weekly_limit: GraphQlBigNumber!
+  ach_weekly_limit: GraphQlBigNumber!
+}
+
+type WithdrawalLimitsAndFees {
+  wire_fee: GraphQlBigNumber!
+  wire_min_amount: GraphQlBigNumber!
+  wire_max_amount: GraphQlBigNumber!
+  ach_fee: GraphQlBigNumber!
+  ach_min_amount: GraphQlBigNumber!
+  ach_max_amount: GraphQlBigNumber!
+}
+
+type DepositLimitsAndFees {
+  credit_card_daily_limit: GraphQlBigNumber!
+  credit_card_instant_daily_limit: GraphQlBigNumber!
+  credit_card_weekly_limit: GraphQlBigNumber!
+  credit_card_instant_weekly_limit: GraphQlBigNumber!
+  wire_daily_limit: GraphQlBigNumber!
+  wire_weekly_limit: GraphQlBigNumber!
+  credit_card_lower_limit: GraphQlBigNumber!
+  wire_lower_limit: GraphQlBigNumber!
+  ach_lower_limit: GraphQlBigNumber!
+  credit_card_fee: GraphQlBigNumber!
+  debit_card_fee: GraphQlBigNumber!
+  wire_fee: GraphQlBigNumber!
+  ach_fee: GraphQlBigNumber!
+}
+
+type Wax {
+  id: UUID4!
+  amount: GraphQlBigNumber!
+  asset: Asset!
+}
+
+enum CircleFundStatus {
+  Settled
+  ContigentHold
+  PendingTransfer
+  Disbursable
+}
+
+enum CirclePaymentStatus {
+  pending
+  failed
+  confirmed
+  paid
+  action_required
+  refunded
+}
+
+enum CirclePaymentType {
+  blockchain
+  ach
+  card
+  wire
+}
+
+type CirclePayment {
+  id: UUID4!
+  redirect_url: String
+  amount: GraphQlBigNumber!
+  fee: GraphQlBigNumber!
+  type: CirclePaymentType!
+  status: CirclePaymentStatus!
+  created_at: String!
+  updated_at: String!
+  description: String
+  chain: CircleChainAddress
+}
+
+enum CircleChains {
+  ALGO
+  AVAX
+  HBAR
+  SOL
+  XLM
+  TRX
+  ETH
+}
+
+type CircleChainAddress {
+  chain: CircleChains!
+  address: String!
+  address_tag: String
+}
+
+enum CircleMethodStatus {
+  enabled
+  requires_proof_of_banking
+  pending
+  denied
+}
+
+type CircleProofOfBankingRequest {
+  id: UUID4!
+}
+
+type InternalProofOfBanking {
+  id: UUID4!
+  bank_document: String
+  selfie_with_document: String
+  created_at: String!
+  updated_at: String!
+  account_id: UUID4!
+  method_type: CirclePaymentType!
+  method_id: UUID4!
+  status: CircleMethodStatus!
+  customer_support_note: String
+}
+
+type InternalProofOfBankingImages {
+  bank_document: String
+  selfie_with_document: String
+}
+
+type CircleAch {
+  id: UUID4!
+  description: String!
+  nickname: String
+  status: CircleMethodStatus!
+  proof_of_banking_request: CircleProofOfBankingRequest
+  type: CirclePaymentType!
+}
+
+type CircleWire {
+  id: UUID4!
+  description: String!
+  nickname: String
+  status: CircleMethodStatus!
+  type: CirclePaymentType!
+}
+
+type CircleWireBeneficiaryPerson {
+  name: String!
+  address1: String!
+  address2: String!
+}
+
+type CircleWireBeneficiaryBank {
+  name: String!
+  address: String!
+  city: String!
+  postalCode: String!
+  country: String!
+  swiftCode: String!
+  routingNumber: String!
+  accountNumber: String!
+}
+
+type CircleWireInstruction {
+  beneficiary: CircleWireBeneficiaryPerson!
+  beneficiary_bank: CircleWireBeneficiaryBank!
+  tracking_reference: String!
+}
+
+type CircleCreditCard {
+  id: UUID4!
+  last4: String!
+  network: String!
+  nickname: String
+  status: CircleMethodStatus!
+  type: CirclePaymentType!
+}
+
+type CircleKey {
+  key_id: String!
+  public_key: String!
+}
+
+type FracpackOption {
+  id: UUID4!
+  name: String!
+  image: String!
+}
+
+type DibbsError {
+  error_code: String!
+  error_info: JSONObject
+}
+
+type DibbsBoolean {
+  result: Boolean!
+}
+
+type DibbsString {
+  result: String!
+}
+
+type DibbsFloat {
+  result: GraphQlBigNumber!
+}
+
+type DibbsUUID4 {
+  result: UUID4!
+}
+
+union AuthPayload_or_Error = AuthPayload | DibbsError
+
+union String_or_Error = DibbsString | DibbsError
+
+union Boolean_or_Error = DibbsBoolean | DibbsError
+
+union Float_or_Error = DibbsFloat | DibbsError
+
+union TwoFaSetupPayload_or_Error = TwoFaSetupPayload | DibbsError
+
+union UUID4_or_Error = DibbsUUID4 | DibbsError
+
+union UUID4Array_or_Error = UUID4Array | DibbsError
+
+union FracPack_or_Error = FracPack | DibbsError
+
+union FracPackBuy_or_Error = FracPackBuy | DibbsError
+
+union Order_or_Error = Order | DibbsError
+
+union EstimateBuyArray_or_Error = EstimateBuyArray | DibbsError
+
+union EstimateSellArray_or_Error = EstimateSellArray | DibbsError
+
+union CircleCreditCard_or_Error = CircleCreditCard | DibbsError
+
+union CircleKey_or_Error = CircleKey | DibbsError
+
+union CirclePayment_or_Error = CirclePayment | DibbsError
+
+union CircleAchSignature_or_Error = CircleAchSignature | DibbsError
+
+union CircleDepositMethods = CircleAch | CircleCreditCard | CircleWire
+
+union CircleWithdrawalMethods = CircleAch | CircleWire
+
+union CircleWire_or_Error = CircleWire | DibbsError
+
+union CircleWireInstruction_or_Error = CircleWireInstruction | DibbsError
+
+union CircleChainAddress_or_Error = CircleChainAddress | DibbsError
+
+union CircleWithdrawal_or_Error = CircleWithdrawal | DibbsError
+
+union SocureDocument_or_Error = SocureDocument | DibbsError
+
+union DailyRewardClaim_or_Error = DailyRewardClaim | DibbsError
+
+union InternalProofOfBankingImages_or_Error =
+    InternalProofOfBankingImages
+  | DibbsError
+
+type Mutation {
+  add_shipping_method(
+    shipment_method: String!
+    shipment_recipient_address: String!
+  ): Boolean!
+  del_shipping_method(shipment_id: UUID4!): Boolean!
+  ship_asset(shipment_method: UUID4!, asset_id: Int!): Boolean!
+  claim_campaign(code: String!): Boolean!
+  auction_bid(auction_id: UUID4!, amount: GraphQlBigNumber!): UUID4!
+  auction_cancel(auction_id: UUID4!): UUID4!
+  auction_create(
+    nft_id: UUID4!
+    start_time: String!
+    end_time: String!
+    min_bid: GraphQlBigNumber!
+    buy_price: GraphQlBigNumber
+  ): UUID4!
+  password_reset(email: String!, secret: String!, password: String!): Boolean!
+  password_change(
+    current_password: String!
+    new_password: String!
+    captcha: String
+  ): Boolean!
+  _signup(
+    email: String!
+    password: String!
+    keepme: Boolean
+    captcha: String
+    ref: String
+    referral_code: String
+    invite: String
+  ): AuthPayload_or_Error!
+  _confirm_email(secret: String!): Boolean_or_Error!
+  _cancel_signup(secret: String!): Boolean_or_Error!
+  _login(
+    email: String!
+    password: String!
+    keep_me: Boolean
+    captcha: String
+    twofa: String
+  ): AuthPayload_or_Error!
+  _auth_with_google(
+    authToken: String!
+    keep_me: Boolean
+    twofa: String
+    agreed_to_tos: Boolean
+    referral_code: String
+  ): AuthPayload_or_Error!
+  _auth_with_apple(
+    authToken: String!
+    keep_me: Boolean
+    twofa: String
+    agreed_to_tos: Boolean
+    referral_code: String
+  ): AuthPayload_or_Error!
+  _logout: Boolean_or_Error!
+  _resend_email_confirmation: Boolean_or_Error!
+  _password_reset_step1(email: String!, captcha: String): Boolean_or_Error!
+  _password_reset_step2(secret: String!, password: String!): Boolean_or_Error!
+  _password_change(
+    current_password: String!
+    new_password: String!
+    captcha: String
+  ): Boolean_or_Error!
+  _twofa_setup_step1: Boolean_or_Error!
+  _twofa_setup_step2(secret: String!): TwoFaSetupPayload_or_Error!
+  _twofa_setup_step3(twofa: String!): Boolean_or_Error!
+  _twofa_disable_step1(twofa: String!): Boolean_or_Error!
+  _twofa_disable_step2(secret: String!): Boolean_or_Error!
+  _twofa_reset_step1(
+    email: String!
+    password: String!
+    twofa_recover: String!
+    captcha: String
+  ): Boolean_or_Error!
+  _twofa_reset_step1_sso(
+    type: SSOClientType!
+    authToken: String!
+    twofa_recover: String!
+    captcha: String
+  ): Boolean_or_Error!
+  _twofa_reset_step2(secret: String!): Boolean_or_Error!
+  _logout_session(token_uuid: UUID4!): Boolean_or_Error!
+  referral_invite_friends_email(emails: [String!]!): Boolean_or_Error
+  fracpack_choose(id: UUID4!): Boolean_or_Error!
+  update_profile(
+    name: String!
+    address_street: String!
+    address_city: String!
+    address_state: String!
+    address_zip: String!
+    address_country: String!
+    phone: String!
+    birthday: String!
+    tax_id: String
+  ): Boolean!
+  update_email_preferences(
+    news: Boolean
+    offers: Boolean
+    order_summary: Boolean
+    new_referrals: Boolean
+    deposits: Boolean
+    account_updates: Boolean
+    login: Boolean
+  ): Boolean!
+  twofa_setup_step1: TwoFaSetupPayload!
+  twofa_setup_step2(twofa: String!): Boolean!
+  twofa_disable_step1(twofa: String!): Boolean!
+  twofa_disable_step2(verification: String!): Boolean!
+  buy(
+    pair: StringUpperCase!
+    amount: GraphQlBigNumber!
+    limit: GraphQlBigNumber
+    expected_asset_out: GraphQlBigNumber
+  ): Order!
+  buy_v2(estimate_row_id: UUID4!): Order_or_Error!
+  sell_v2(estimate_row_id: UUID4!): Order_or_Error!
+  sell(
+    pair: StringUpperCase!
+    amount: GraphQlBigNumber!
+    limit: GraphQlBigNumber
+    expected_asset_out: GraphQlBigNumber
+  ): Order!
+  buy_player(
+    player_id_hr: StringLowerCase!
+    amount_usd: GraphQlBigNumber!
+    buy_distribution_id: UUID4!
+  ): PlayerBuyResult!
+  sell_player(
+    player_id_hr: StringLowerCase!
+    percentage: GraphQlBigNumber!
+    sell_distribution_id: UUID4!
+  ): PlayerSellResult!
+  cancel_order(order_id: UUID4!): Boolean!
+  acknowledge_wax_seen(id: UUID4!): Boolean!
+  drop_buy(drop_id: Int!, supply_amount: GraphQlBigNumber!): Boolean!
+  pack_open(pack_id: UUID4!): Pack!
+  pack_finalize(pack_id: UUID4!): Pack!
+  subscribe_to_channel(iterable_channel_id: Int!): Boolean_or_Error!
+  unsubscribe_from_channel(iterable_channel_id: Int!): Boolean_or_Error
+  unsubscribe_to_all_channels: Boolean_or_Error
+  subscribe_to_all_channels: Boolean_or_Error
+  socure_upload_proof_of_address(file: Upload!): SocureDocument_or_Error!
+  circle_get_public_key: CircleKey_or_Error!
+  circle_create_credit_card(
+    encrypted_card_data: String!
+    card_holder_name: String!
+    key_id: String!
+    month_expire: Int!
+    year_expire: Int!
+    nickname: String
+  ): CircleCreditCard_or_Error!
+  circle_delete_credit_card(card_id: UUID4!): Boolean_or_Error!
+  circle_nickname_credit_card(
+    card_id: UUID4!
+    nickname: String
+  ): Boolean_or_Error!
+  circle_initiate_credit_card_deposit(
+    card_id: UUID4!
+    encrypted_card_data: String!
+    key_id: String!
+    amount: GraphQlBigNumber!
+  ): CirclePayment_or_Error!
+  finish_credit_card_deposit(
+    payment_id: UUID4!
+    successful_3ds: Boolean!
+  ): CirclePayment_or_Error!
+  internal_create_cs_note(user_id: UUID4!, note: String!): Boolean_or_Error!
+  internal_delete_cs_note(user_id: UUID4!, note_id: UUID4!): Boolean_or_Error!
+  internal_circle_create_wallet(email: String!): Boolean_or_Error!
+  circle_upload_proof_of_bank(
+    id: UUID4!
+    bank_document: Upload!
+    selfie_with_document: Upload!
+  ): Boolean_or_Error!
+  circle_create_link_token: String_or_Error!
+  circle_create_ach_deposit_method(
+    plaid_public_token: String!
+    plaid_account_id: String!
+    nickname: String
+  ): Boolean_or_Error!
+  circle_debug_create_ach_deposit_method(
+    money_in_bank: GraphQlBigNumber!
+    nickname: String
+  ): Boolean_or_Error!
+  circle_delete_ach_for_deposit(ach_id: UUID4!): Boolean_or_Error!
+  circle_delete_ach_for_withdrawal(ach_id: UUID4!): Boolean_or_Error!
+  circle_nickname_ach(ach_id: UUID4!, nickname: String): Boolean_or_Error!
+  circle_request_ach_signature_to_sign(
+    deposit_amount: GraphQlBigNumber
+  ): CircleAchSignature_or_Error!
+  circle_sign_ach_signature(signature_id: Int!): Boolean_or_Error!
+  circle_initiate_ach_deposit(
+    ach_id: UUID4!
+    signature_id: Int!
+    amount: GraphQlBigNumber!
+  ): CirclePayment_or_Error!
+  circle_create_usa_wire(
+    account_number: String!
+    routing_number: String!
+  ): CircleWire_or_Error!
+  circle_nickname_wire(wire_id: UUID4!, nickname: String!): Boolean_or_Error!
+  circle_delete_wire_for_deposit(wire_id: UUID4!): Boolean_or_Error!
+  circle_delete_wire_for_withdrawal(wire_id: UUID4!): Boolean_or_Error!
+  circle_debug_initiate_wire_transfer(
+    tracking_reference: String!
+    amount: GraphQlBigNumber!
+  ): Boolean_or_Error!
+  circle_create_chain_deposit_address(
+    chain: CircleChains!
+  ): CircleChainAddress_or_Error!
+  circle_withdrawal_ach(
+    ach_id: UUID4!
+    amount: GraphQlBigNumber!
+  ): CircleWithdrawal_or_Error!
+  circle_withdrawal_wire(
+    wire_id: UUID4!
+    amount: GraphQlBigNumber!
+  ): CircleWithdrawal_or_Error!
+  circle_withdrawal_chain(
+    chain: CircleChains!
+    address: String!
+    address_tag: String
+    amount: GraphQlBigNumber!
+  ): CircleWithdrawal_or_Error!
+  circle_withdrawal_resend_authorization_email(
+    withdrawal_id: UUID4!
+  ): Boolean_or_Error!
+  internal_circle_approve_or_deny_withdrawal(
+    withdrawal_id: UUID4!
+    approve: Boolean!
+  ): Boolean_or_Error!
+  internal_withdrawal_resend_authorization_email(
+    email: String!
+    withdrawal_id: UUID4!
+  ): Boolean_or_Error!
+  circle_authorize_withdrawal(withdrawal_id: UUID4!): Boolean_or_Error!
+  landingpage_signup(
+    email: String!
+    ref: String
+    inbound: String
+    captcha: String
+    special: String
+  ): LandingPageSignupPayload
+  submit_feedback(feedback: String!): Boolean
+  fracpack_buy_fracpack(
+    fracpack_definition_id: UUID4!
+    pack_amount: Int!
+  ): FracPackBuy_or_Error!
+  fracpack_roll_fracpack(fracpack_id: UUID4!): FracPack_or_Error!
+  fracpack_decide_keep_or_sell(
+    fracpack_id: UUID4!
+    decisions: [FracPackDecision!]!
+  ): Boolean_or_Error!
+  watch_list_add_asset(asset_id: Int!, list_name: String!): Boolean_or_Error!
+  watch_list_remove_asset(asset_id: Int!, list_name: String!): Boolean_or_Error!
+  in_app_banner_event(
+    banner_id: UUID4!
+    event: InAppBannerEvent!
+  ): Boolean_or_Error!
+  attempt_level_up(userInfo: AttemptLevelUpParameters!): UserKycState_or_Error!
+  daily_reward_claim: DailyRewardClaim_or_Error!
+  rewards_shop_buy(id: UUID4!): UUID4_or_Error!
+  set_pair_price_alert(
+    pair_id: Int!
+    target_price: GraphQlBigNumber!
+  ): Boolean_or_Error
+  unset_pair_price_alert(pair_id: Int!): Boolean_or_Error
+  internal_fracpack_upsert(
+    id: UUID4
+    id_hr: String!
+    name: String!
+    image: String!
+    color_glow_hex: String!
+    cards_per_pack: Int!
+    fraction_per_card: GraphQlBigNumber!
+    max_pack_amount_sold: Int!
+    price: GraphQlBigNumber!
+    sale_start_time: UnixTimeSeconds!
+    sale_end_time: UnixTimeSeconds!
+  ): Boolean!
+  internal_fracpack_add_asset(
+    asset_id: Int!
+    fracpack_definition_id: UUID4!
+    amount: GraphQlBigNumber!
+    weight: Int!
+  ): Boolean!
+  internal_fracpack_remove_asset(
+    asset_id: Int!
+    fracpack_definition_id: UUID4!
+  ): Boolean!
+  internal_fracpack_set_asset_weight(
+    asset_id: Int!
+    fracpack_definition_id: UUID4!
+    weight: Int!
+  ): Boolean!
+  internal_change_email(account_email: String!, new_email: String!): Boolean
+  internal_force_asset_audit: [String!]!
+  internal_create_sport(
+    id_hr: String!
+    name: String!
+    img: String!
+    ordering: Int!
+    active: Boolean!
+  ): Boolean!
+  internal_update_sport(
+    id: Int!
+    id_hr: String
+    name: String
+    img: String
+    ordering: Int
+    active: Boolean
+  ): Boolean!
+  internal_create_team(id_hr: String!, name: String!, img: String!): Boolean!
+  internal_create_player(
+    id_hr: String!
+    name: String!
+    img: String!
+    team_id: Int!
+    sport_id: Int!
+    jersey_number: String!
+    active: Boolean
+  ): Boolean!
+  internal_set_player_id_hr(player_id: Int!, id_hr: String!): Boolean!
+  internal_set_player_image(id: Int!, img: String!): Boolean!
+  internal_set_player_visibility(id: Int!, active: Boolean!): Boolean!
+  internal_create_campaign(
+    prefix: String!
+    name: String!
+    description: String
+    min_value: Int!
+    max_value: Int!
+    average_value: Int!
+    max_redemptions_per_user: Int!
+    ends_at: String!
+    image: ImageUrl!
+    on_signup: Boolean
+    refcode: String
+  ): Boolean!
+  internal_edit_campaign(
+    campaign_id: UUID4!
+    description: String
+    min_value: Int
+    max_value: Int
+    average_value: Int
+    max_redemptions_per_user: Int
+    ends_at: String
+    image: ImageUrl
+    on_signup: Boolean
+    refcode: String
+  ): Boolean!
+  internal_add_codes_for_campaign(prefix: String!, number_of_codes: Int!): Int!
+  internal_assign_value_to_campaign_codes(
+    campaign_id: UUID4!
+    count: Int!
+    value: Int!
+  ): Boolean!
+  internal_create_asset(
+    ticker: String!
+    name: String!
+    img_front: String!
+    img_back: String!
+    player_id: Int
+  ): Boolean!
+  internal_create_asset_bulk(
+    ticker: [String!]!
+    name: [String!]!
+    img_front: [String!]!
+    img_back: [String!]!
+    player_id: [Int]!
+  ): Boolean!
+  internal_get_mint_asset_requests(
+    submission_id: Int!
+    status: [mint_status!]
+  ): [MintRequest]!
+  internal_mint_asset(
+    asset_id: Int!
+    identifier: String!
+    originator: UUID4
+  ): Boolean!
+  internal_mint_asset_new(mint_request_id: Int!): Boolean_or_Error!
+  internal_mint_asset_request(
+    submission_id: Int!
+    amount_to_dibbs: GraphQlBigNumber!
+    amount_to_originator: GraphQlBigNumber!
+    amount_to_drop: GraphQlBigNumber!
+    card_price: GraphQlBigNumber!
+  ): Boolean_or_Error!
+  internal_mint_asset_decline(mint_request_id: Int!, reason: String): Boolean!
+  internal_mint_asset_bulk(
+    asset_id: [Int!]!
+    identifier: [String!]!
+    originator: [UUID4]!
+  ): Boolean!
+  internal_set_asset_name(asset_id: Int!, name: String!): Boolean!
+  internal_set_asset_visibility(id: Int!, active: Boolean!): Boolean!
+  internal_set_asset_detailed_description(
+    asset_id: Int!
+    detailed_description: Markdown!
+  ): Boolean!
+  internal_upload_img_by_url_to_ipfs(url: String!): String!
+  internal_upload_img_by_url(url: String!, width: Int, height: Int): UUID4!
+  internal_upload_img_by_url_no_bg(
+    url: String!
+    width: Int
+    height: Int
+  ): UUID4!
+  internal_upload_base64_file(base64: String!, width: Int, height: Int): UUID4!
+  internal_add_pair(base: Int!, quote: Int!): Boolean!
+  internal_set_pair_visibility(id: Int!, active: Boolean!): Boolean!
+  internal_add_news(
+    title: String!
+    target: String!
+    img: String!
+    readTime: Int!
+    source: String!
+    active: Boolean!
+    id: Int
+  ): Boolean!
+  internal_del_news(id: Int!): Boolean!
+  internal_set_news_visibility(id: Int!, active: Boolean!): Boolean!
+  internal_add_educational_article(
+    title: String!
+    sub_title: String!
+    target: String!
+    img: String!
+    active: Boolean!
+    id: Int
+  ): Boolean!
+  internal_del_educational_article(id: Int!): Boolean!
+  internal_set_educational_article_visibility(
+    id: Int!
+    active: Boolean!
+  ): Boolean!
+  internal_add_carousel_item(
+    img: String!
+    target: String!
+    active: Boolean!
+    id: Int
+  ): Boolean!
+  internal_del_carousel_item(id: Int!): Boolean!
+  internal_set_carousel_item_visibility(id: Int!, active: Boolean!): Boolean!
+  internal_add_drop(
+    listed: Boolean!
+    type: String!
+    start: Float!
+    end: Float!
+    id_hr: String!
+    asset_value: GraphQlBigNumber!
+    initial_supply: GraphQlBigNumber!
+    asset_id: Int!
+    originator: UUID4!
+    asset_amount_originator: GraphQlBigNumber!
+    asset_amount_liquidiy_provider: GraphQlBigNumber!
+  ): Boolean
+  internal_set_drop_listed(drop_id: Int!, listed: Boolean!): Boolean!
+  internal_set_drop_weight(drop_id: Int!, weight: Int!): Boolean!
+  internal_set_drop_price(drop_id: Int!, price: GraphQlBigNumber!): Boolean!
+  internal_finish_drop(drop_id: Int!): Boolean!
+  internal_update_drop(
+    drop_id: Int!
+    start_time: Float
+    end_time: Float
+  ): Boolean!
+  internal_transfer_money_by_account_id(
+    from: UUID4!
+    to: UUID4!
+    asset_id: Int!
+    amount: GraphQlBigNumber!
+    reason: String!
+  ): Boolean!
+  internal_add_liquidity(
+    pair: Int!
+    amount_base: GraphQlBigNumber!
+    amount_quote: GraphQlBigNumber!
+  ): Boolean!
+  internal_add_invites(invites: [String!]!): Boolean!
+  internal_set_internal_accounts: [String!]!
+  internal_add_test_funds(email: String!, amount: GraphQlBigNumber!): Boolean!
+  internal_add_user_shipping_method(
+    account_id: UUID4!
+    shipment_method: String!
+    shipment_recipient_address: String
+  ): Boolean!
+  internal_shipment_complete_pwcc_transfer(
+    shipment_id: [UUID4!]!
+    transfer_id: [String!]!
+  ): Boolean!
+  internal_shipment_set_wax_asset_id(
+    shipment_id: UUID4!
+    wax_asset_id: String
+  ): Boolean!
+  internal_set_pack_asset_value(
+    asset_id: Int!
+    value_usd: GraphQlBigNumber!
+  ): Boolean!
+  internal_give_pack(account_id: UUID4, email: String): Boolean!
+  internal_fix_webhook(account_email: String!, reset_errors: Boolean!): Boolean!
+  internal_patch_users_profile(
+    account_email: String!
+    name: String!
+    address_street: String!
+    address_city: String!
+    address_state: String!
+    address_zip: String!
+    address_country: String!
+    phone: String!
+    birthday: String!
+  ): Boolean!
+  internal_invite_from_waitlist(emails: [String!]!): Boolean!
+  internal_disable_user_2fa(account_email: String!): Boolean!
+  internal_add_user_kyc_actions(
+    account_email: String!
+    actions: [String!]!
+    kyc_email_types: [String!]!
+    add_infront: Boolean
+  ): Boolean!
+  internal_cancel_internal_orders(pair_id: Int!): Boolean!
+  internal_remove_liquidity(pair_id: Int!): Boolean!
+  internal_set_limit(
+    email: String!
+    depositType: String!
+    upper_limit_daily: GraphQlBigNumber
+    upper_limit_weekly: GraphQlBigNumber
+    lower_limit: GraphQlBigNumber
+    upper_limit_instant_daily: GraphQlBigNumber
+    upper_limit_instant_weekly: GraphQlBigNumber
+  ): Boolean
+  internal_set_default_limit(
+    upper_limit_card_daily: GraphQlBigNumber
+    upper_limit_card_weekly: GraphQlBigNumber
+    upper_limit_card_instant_daily: GraphQlBigNumber
+    upper_limit_card_insant_weekly: GraphQlBigNumber
+    upper_limit_wire_daily: GraphQlBigNumber
+    upper_limit_wire_weekly: GraphQlBigNumber
+    upper_limit_wire_insant_daily: GraphQlBigNumber
+    upper_limit_wire_insant_weekly: GraphQlBigNumber
+    lower_limit_wire: GraphQlBigNumber
+    lower_limit_card: GraphQlBigNumber
+    maximum_instant_settle_fraction: GraphQlBigNumber
+    upper_limit_ach_weekly: GraphQlBigNumber
+    lower_limit_ach: GraphQlBigNumber
+  ): Boolean
+  internal_set_default_withdrawal_limit(
+    wire_minimum: GraphQlBigNumber!
+    ach_minimum: GraphQlBigNumber!
+    wire_maximum_daily: GraphQlBigNumber!
+    ach_maximum_daily: GraphQlBigNumber!
+  ): Boolean
+  internal_request_proof_of_address(
+    account_email: String!
+    kyc_email_types: [String!]!
+  ): Boolean
+  internal_get_progress(account_email: String!): String!
+  internal_debug_get_limit(account_email: String!): String!
+  internal_edit_feature_flag(
+    flag_name: String!
+    value: String!
+    category: String
+  ): Boolean!
+  internal_user_set_flag(
+    email: String!
+    flag_name: String!
+    value: String
+  ): Boolean!
+  internal_user_del_flag(email: String!, flag_name: String!): Boolean!
+  internal_batch_user_add_flag(
+    email: [String!]!
+    flag_name: [String!]!
+    value: [String!]!
+  ): Boolean!
+  internal_place_orders(
+    start_price: [GraphQlBigNumber!]!
+    amount_card: [GraphQlBigNumber!]!
+    step_multiplier: [GraphQlBigNumber!]!
+    step_dollar_amount: [GraphQlBigNumber!]!
+    max_sells: [Int!]!
+    pair_id: [Int!]!
+  ): Boolean!
+  internal_add_asset_submission(
+    name: [String!]!
+    img_front: [ImageUrl!]!
+    img_back: [ImageUrl!]!
+    img_front_ipfs: [String!]!
+    img_back_ipfs: [String!]!
+    serial_id: [String!]!
+    grade: [String!]!
+    originator: [UUID4!]!
+    location: [String!]!
+    pwcc_item_id: [String!]!
+    pwcc_submission_id: [String!]!
+    pwcc_insured_value: [GraphQlBigNumber!]!
+    pwcc_market_value: [GraphQlBigNumber!]!
+    pwcc_market_value_timestamp: [String!]!
+    asset_id: [Int]!
+    player_id: [Int]!
+    sports_id: [Int]!
+  ): Boolean!
+  internal_add_asset_submission_new(
+    name: [String!]!
+    img_front: [ImageUrl!]!
+    img_back: [ImageUrl!]!
+    img_front_ipfs: [String!]!
+    img_back_ipfs: [String!]!
+    serial_id: [String!]!
+    serial_type: [serial_type!]!
+    grade: [String!]!
+    originator: [UUID4!]!
+    location: [asset_location!]!
+    pwcc_item_id: [String!]!
+    pwcc_submission_id: [Int!]!
+    pwcc_insured_value: [GraphQlBigNumber!]!
+    pwcc_market_value: [GraphQlBigNumber!]!
+    pwcc_market_value_timestamp: [String!]!
+    asset_id: [Int]!
+    player_id: [Int]!
+    sports_id: [Int]!
+  ): Boolean!
+  internal_set_submission_player_and_team(
+    submission_id: [Int!]!
+    player_id: [Int]!
+    sports_id: [Int]!
+  ): Boolean!
+  internal_set_submission_wax_asset(
+    submission_id: [Int!]!
+    wax_asset_id: [String!]!
+  ): Boolean!
+  internal_set_submission_asset_id(
+    submission_id: [Int!]!
+    asset_id: [Int!]!
+  ): Boolean!
+  internal_remint_submission_wax_asset(submission_id: Int!): Boolean!
+  internal_burn_submission_wax_asset(submission_id: Int!): Boolean!
+  internal_mint_submission_wax_asset(
+    submission_id: [Int!]!
+    msig: Boolean
+  ): Boolean!
+  internal_force_ship_asset(
+    account_id: UUID4!
+    shipment_method: String!
+    shipment_recipient_address: String!
+    asset_id: Int!
+  ): UUID4
+  internal_set_submission_name_by_asset(
+    submission_id: [Int!]!
+    asset_id: [Int!]!
+  ): Boolean!
+  internal_set_manual_review_required(
+    account_email: String!
+    manual_review_required: Boolean!
+  ): Boolean
+  internal_set_language_entry(
+    language: String!
+    key: String!
+    value: String!
+  ): Boolean
+  internal_set_kyc_patch_count(
+    account_email: String!
+    patch_count: Int!
+  ): Boolean
+  internal_set_profile_patch_count(
+    account_email: String!
+    patch_count: Int!
+  ): Boolean
+  internal_set_drop_max_fraction_per_user(
+    drop_id: Int!
+    max_fraction_per_user: GraphQlBigNumber!
+  ): Boolean!
+  internal_set_assets_originator(
+    originator_email: String!
+    asset_identifiers: [String!]!
+  ): Boolean!
+  internal_set_transfer_done(transfer_id: UUID4!): Boolean!
+  internal_change_transfer_id(transfer_id: UUID4!): Boolean!
+  internal_remove_already_registered_ssn(tax_id: String!): Boolean
+  internal_update_pairs_sort_cardladder(highest: Int!, lower: Int!): Boolean!
+  internal_add_originator(
+    account_email: String!
+    fee: GraphQlBigNumber!
+  ): Boolean!
+  internal_set_asset_cardladder_id(id: Int!, cl_id: String!): Boolean!
+  internal_burn_asset(
+    asset_id: Int!
+    amount: GraphQlBigNumber!
+    reason: String!
+    funds_transfer_id: UUID4!
+  ): Boolean!
+  internal_set_or_update_onboarding_sequence_item(
+    id: [Int]!
+    image: [String!]!
+    title: [String!]!
+    subtext: [String!]!
+    button_caption: [String!]!
+    active: [Boolean!]!
+    order_weight: [GraphQlBigNumber!]!
+  ): Boolean!
+  internal_set_sift_score_threshold(
+    deposit_ach: Float!
+    deposit_wire: Float!
+    deposit_credit_card: Float!
+    withdraw_ach: Float!
+    withdraw_wire: Float!
+  ): Boolean
+  internal_get_sift_score_threshold: SiftScoreTreshold!
+  internal_set_fracpack_definition_visiblity(
+    fracpack_definition_id: UUID4!
+    visible: Boolean!
+  ): Boolean!
+  internal_upsert_salted_ssn_check_skips(
+    email: String!
+    enabled: Boolean!
+  ): Boolean
+  internal_delete_ssn_check_skips(email: String!): Boolean
+  internal_set_buy_sell_presets(
+    key: String!
+    values: [Float]!
+  ): Boolean_or_Error!
+  internal_set_tooltip(
+    key: String!
+    title: String!
+    title_short: String!
+    body: String
+    learn_more: String
+  ): Boolean
+  internal_del_tooltip(key: String!): Boolean
+  internal_transfer_money_to_user(
+    amount: Float!
+    emails: [String]!
+    comment: String!
+  ): Boolean_or_Error!
+  internal_merge_two_assets(good_asset_id: Int!, bad_asset_id: Int!): Boolean!
+  internal_pack_finalize(pack_id: UUID4!): Pack!
+  internal_ach_signature_template_create(text: String!): Boolean_or_Error!
+  internal_ach_signature_template_update(
+    id: Int!
+    text: String!
+  ): Boolean_or_Error!
+  internal_ach_signature_template_get_all_signature_templates: [CircleAchSignatureTemplate!]!
+  internal_ach_signature_template_get_options: [CircleAchSignatureTemplateOption]!
+  internal_referral_set_user_campaign_id(
+    email: String!
+    campaign_id: String!
+  ): Boolean_or_Error!
+  internal_referral_unset_user_campaign_id(email: String!): Boolean_or_Error!
+  internal_change_drops_price(
+    drop_id: Int!
+    price: GraphQlBigNumber!
+    description: String!
+  ): Boolean!
+  internal_create_in_app_banner(
+    ordering: Int!
+    icon: String!
+    h1: String!
+    body_text: String!
+    link_text: String
+    link_destination: String
+    enabled: Boolean!
+    dismissible: Boolean!
+    hide_if_clicked: Boolean!
+    hide_if_viewed: Boolean!
+    hide_if_viewed_times: Int
+    disable_after_date: String
+  ): Boolean_or_Error!
+  internal_update_in_app_banner(
+    id: UUID4!
+    ordering: Int!
+    icon: String!
+    h1: String!
+    body_text: String!
+    link_text: String
+    link_destination: String
+    enabled: Boolean!
+    dismissible: Boolean!
+    hide_if_clicked: Boolean!
+    hide_if_viewed: Boolean!
+    hide_if_viewed_times: Int
+    disable_after_date: String
+  ): Boolean_or_Error
+  internal_delete_in_app_banner(id: UUID4!): Boolean_or_Error!
+  internal_get_all_webhooks: [CircleWebhook!]!
+  internal_delete_webhook(webhook_id: String!): Boolean_or_Error!
+  internal_add_webhook(endpoint: String): Boolean_or_Error!
+  internal_socure_kyc_set_level(
+    account_email: String!
+    level_to_apply: UUID4!
+  ): Boolean_or_Error!
+  internal_socure_kyc_freeze(account_email: String!): Boolean_or_Error!
+  internal_socure_kyc_freeze_with_reason(
+    account_email: String!
+  ): Boolean_or_Error!
+  internal_socure_kyc_unfreeze(account_email: String!): Boolean_or_Error!
+  internal_socure_kyc_request_proof_of_address(
+    account_email: String!
+  ): Boolean_or_Error!
+  internal_socure_kyc_accept_proof_of_address(
+    account_email: String!
+  ): Boolean_or_Error!
+  internal_socure_kyc_cancel_proof_of_address(
+    account_email: String!
+  ): Boolean_or_Error!
+  internal_socure_kyc_reject_proof_of_address(
+    account_email: String!
+  ): Boolean_or_Error!
+  internal_socure_kyc_set_level_to_resubmit(
+    account_email: String!
+    level_to_resubmit: UUID4!
+  ): Boolean_or_Error!
+  internal_socure_kyc_resubmit_level(account_email: String!): Boolean_or_Error!
+  internal_socure_kyc_refer(account_email: String!): Boolean_or_Error!
+  internal_socure_kyc_approve(account_email: String!): Boolean_or_Error!
+  internal_socure_kyc_update_customer_support_commentary(
+    account_email: String!
+    commentary: String!
+  ): Boolean_or_Error!
+  internal_socure_kyc_backfill_circle_wallet_creation(
+    account_email_list: String
+  ): Boolean_or_Error!
+  internal_socure_kyc_backfill_watchlist_webhook_registration(
+    account_email_list: String
+  ): Boolean_or_Error!
+  internal_socure_kyc_attempt_lite(
+    account_email_list: String!
+    send_to: String
+  ): Boolean_or_Error!
+  internal_circle_chain_set_enabled(
+    chain: CircleChains!
+    for_deposit: Boolean!
+    enabled: Boolean!
+  ): Boolean_or_Error!
+  internal_block_user_permission(
+    permission: String!
+    account_id: UUID4!
+  ): Boolean_or_Error!
+  internal_unblock_user_permission(
+    permission: String!
+    account_id: UUID4!
+  ): Boolean_or_Error!
+  internal_get_proof_of_bankings(
+    account_id: UUID4
+    status: CircleMethodStatus
+  ): [InternalProofOfBanking!]!
+  internal_proof_of_banking_set_note(
+    id: UUID4!
+    note: String!
+  ): Boolean_or_Error!
+  internal_approve_or_deny_proof_of_banking(
+    id: UUID4!
+    approve: Boolean!
+    note: String
+  ): Boolean_or_Error!
+  internal_request_proof_of_banking(
+    method_id: UUID4!
+    method_type: CirclePaymentType!
+    note: String
+  ): Boolean_or_Error!
+  internal_fixup_circle_wallets: Boolean_or_Error!
+  internal_get_deposit_log_for_user(email: String!): [Internal_DepositAttempt!]!
+  internal_get_deposit_log_for_deposit(
+    deposit_id: UUID4!
+  ): Internal_DepositAttempt
+  internal_circle_get_sync_balance(email: String!): Float_or_Error!
+  internal_circle_sync_balance(email: String!): Float_or_Error!
+  internal_get_deposit_withdrawal_log_for_user(
+    email: String!
+    get_deposits: Boolean!
+  ): [Internal_DepositAttempt!]!
+  internal_circle_get(path: String!): String!
+  internal_circle_refund_payment(payment_id: UUID4!): Boolean_or_Error!
+  internal_circle_get_refunds(payment_id: UUID4!): [Internal_Refund!]!
+  internal_rewards_shop_add_frackpack_item(
+    campaign_prefix: String!
+    cost: GraphQlBigNumber!
+    value: GraphQlBigNumber!
+    stock_amount: Int!
+    restock_date: UnixTimeSeconds!
+    title: String
+    img: ImageUrl
+    color_glow_hex: String
+  ): Boolean_or_Error!
+  internal_rewards_clear_config: Boolean!
+  internal_rewards_shop_edit_item(
+    id: UUID4!
+    hidden: Boolean
+    cost: GraphQlBigNumber
+    current_stock: Int
+    restock_amount: Int
+    restock_date: UnixTimeSeconds
+    color_glow_hex: String
+  ): Boolean_or_Error!
+  internal_rewards_shop_remove_item(id: UUID4!): Boolean_or_Error!
+  internal_rewards_shop_hide_item(id: UUID4!): Boolean_or_Error!
+  internal_rewards_shop_unhide_item(id: UUID4!): Boolean_or_Error!
+  internal_rewards_credit_gems_list(
+    account_email_list: String!
+    value: GraphQlBigNumber!
+  ): [Boolean_or_Error]!
+  internal_rewards_debit_gems_list(
+    account_email_list: String!
+    value: GraphQlBigNumber!
+  ): [Boolean_or_Error]!
+  internal_resend_webhook(webhook_id: Int!): Boolean_or_Error!
+}
+
+type Internal_Refund {
+  account_id: UUID4!
+  payment_id: UUID4!
+  circle_id: String!
+  finished: Boolean!
+  created_at: String!
+  updated_at: String!
+  updates: [String!]!
+}
+
+type Internal_DepositAttemptUpdate {
+  attempt_id: Int!
+  updated_at: String!
+  type: Internal_LogMessageType!
+  function: String!
+  annotation: String
+  info: String!
+  circle_info: String
+}
+
+type Internal_DepositAttempt {
+  id: Int!
+  created_at: String!
+  start_function: String!
+  type: CirclePaymentType!
+  account_id: UUID4
+  deposit_id: UUID4
+  circle_id: String
+  circle_current_state: CirclePaymentStatus
+  updates: [Internal_DepositAttemptUpdate!]!
+}
+
+enum Internal_LogMessageType {
+  info
+  error
+  success
+}
+
+type DrainResult {
+  success: Int!
+  skipped: Int!
+  failures: [String!]!
+}
+
+type SocureMigrationStatus {
+  uuid: UUID4!
+  status: String!
+  documents: Boolean
+  info: String
+  time: String!
+}
+
+type CircleWebhookDetail {
+  url: String!
+  status: String!
+}
+
+type CircleWebhook {
+  id: String!
+  endpoint: String!
+  subscriptionDetails: [CircleWebhookDetail!]!
+}
+
+type InAppBanner {
+  id: UUID4!
+  ordering: Int!
+  icon: String!
+  h1: String!
+  body_text: String!
+  link_text: String
+  link_destination: String
+  enabled: Boolean!
+  dismissible: Boolean!
+  hide_if_clicked: Boolean!
+  hide_if_viewed: Boolean!
+  hide_if_viewed_times: Int
+  disable_after_date: String
+}
+
+enum InAppBannerEvent {
+  clicked
+  dismissed
+  swipe
+}
+
+type CircleAchSignature {
+  id: Int!
+  text: String!
+  signed: Boolean!
+}
+
+type CircleAchSignatureTemplate {
+  id: Int!
+  text: String!
+  created_at: String!
+  updated_at: String!
+}
+
+type CircleAchSignatureTemplateOption {
+  variable_text: String!
+  example: String!
+}
+
+enum CircleWithdrawalStatus {
+  requires_email_authorization
+  pending
+  cancelled
+  completed
+}
+
+enum CircleWithdrawalType {
+  blockchain
+  ach
+  wire
+}
+
+type CircleWithdrawal {
+  id: UUID4!
+  status: CircleWithdrawalStatus!
+  account_id: UUID4!
+  amount: GraphQlBigNumber!
+  fee: GraphQlBigNumber!
+  type: CircleWithdrawalType!
+  created_at: String!
+  updated_at: String!
+  dibbs_authorized: Boolean!
+  description: String
+  chain: CircleChainAddress
+}
+
+type FracpackDefinition {
+  id: UUID4!
+  id_hr: String!
+  name: String!
+  image: String!
+  color_glow_hex: String!
+  cards_per_pack: Int!
+  fraction_per_card: GraphQlBigNumber!
+  initial_supply: Int!
+  remaining_supply: Int!
+  price: GraphQlBigNumber!
+  sale_start_time: UnixTimeSeconds!
+  sale_end_time: UnixTimeSeconds!
+  possible_assets: [FracpackDefinitionAsset!]!
+}
+
+type FracpackDefinitionAsset {
+  asset: Asset!
+  asset_id: Int!
+  probability: GraphQlBigNumber!
+}
+
+enum FracPackState {
+  unopened
+  opened
+  finalized
+}
+
+type FracPack {
+  id: UUID4!
+  definition_id: UUID4!
+  definition: FracpackDefinition!
+  state: FracPackState!
+  time_bought: UnixTimeSeconds!
+  buy_price: GraphQlBigNumber!
+  cards_inside: [FracPackCard!]!
+}
+
+type FracPackBuy {
+  definition_id: UUID4!
+  definition: FracpackDefinition!
+  fracpacks: [FracPack!]!
+  amount: Int!
+}
+
+enum FracPackCardState {
+  pending
+  claimed
+  sold
+}
+
+type FracPackCard {
+  id: UUID4!
+  fracpack_id: UUID4!
+  state: FracPackCardState!
+  asset: Asset!
+  asset_id: Int!
+  asset_price: GraphQlBigNumber!
+}
+
+input FracPackDecision {
+  fracpack_card_id: UUID4!
+  sell: Boolean!
+}
+
+type SiftScoreTreshold {
+  deposit_ach: Float!
+  deposit_wire: Float!
+  deposit_credit_card: Float!
+  withdraw_ach: Float!
+  withdraw_wire: Float!
+}
+
+type Internal_ComplianceAction {
+  notes: String!
+  handled: Boolean!
+  last_update: String!
+}
+
+type Features {
+  payment_ach_enabled: Boolean!
+  payment_wire_enabled: Boolean!
+  payment_cards_enabled: Boolean!
+  invite_gives_frac_pack: Boolean!
+  cardladder_on_drops: Boolean!
+  cardladder_on_trading: Boolean!
+  promotion_redeem_frac_pack: Boolean!
+  promotion_invite: Boolean!
+  asset_withdraw_on_trading: Boolean!
+  frac_pack_v1_on_home: Boolean!
+  sellers_v1: Boolean!
+  intercom: Boolean!
+  new_buy_sell: Boolean!
+  captcha: Boolean!
+  captcha_app_min_version: String!
+}
+
+type Estimate {
+  not_spent: GraphQlBigNumber!
+  received: GraphQlBigNumber
+  spent: GraphQlBigNumber
+  fee: GraphQlBigNumber
+  average_price: GraphQlBigNumber
+  asset_out: GraphQlBigNumber!
+}
+
+enum PriceImpact {
+  low
+  medium
+  high
+}
+
+type EstimateBuy {
+  average_card_price_purchase: GraphQlBigNumber!
+  card_fraction_purchased: GraphQlBigNumber!
+  usd_amount_spent: GraphQlBigNumber!
+  fee: GraphQlBigNumber!
+  price_change: GraphQlBigNumber!
+  price_impact: PriceImpact!
+  post_purchase_card_price: GraphQlBigNumber!
+  instant_money_spent: GraphQlBigNumber!
+  instant_asset_bought: GraphQlBigNumber!
+  instant_asset_fee: GraphQlBigNumber!
+  is_invalid: Boolean
+  estimate_row_id: UUID4!
+}
+
+type EstimateBuyArray {
+  array: [EstimateBuy]!
+}
+
+type EstimateSell {
+  average_card_price_sold: GraphQlBigNumber!
+  inventory_percentage_sold: GraphQlBigNumber
+  card_fraction_sold: GraphQlBigNumber!
+  usd_amount_received: GraphQlBigNumber!
+  fee: GraphQlBigNumber!
+  price_change: GraphQlBigNumber!
+  price_impact: PriceImpact!
+  post_sale_card_price: GraphQlBigNumber!
+  instant_asset_spent: GraphQlBigNumber!
+  instant_money_received: GraphQlBigNumber!
+  instant_money_fee: GraphQlBigNumber!
+  is_invalid: Boolean
+  estimate_row_id: UUID4!
+}
+
+type EstimateSellArray {
+  array: [EstimateSell]!
+}
+
+type PlayerSellDistribution {
+  id: UUID4
+  percentage: GraphQlBigNumber
+  target_amount_usd: GraphQlBigNumber!
+  target_amount_usd_fee: GraphQlBigNumber!
+  assets: [PlayerSellDistributionAsset!]!
+}
+
+type PlayerSellDistributionAsset {
+  asset: Asset!
+  estimate: Estimate!
+}
+
+type PlayerBuyDistribution {
+  id: UUID4!
+  amount_usd: GraphQlBigNumber!
+  amount_usd_fee: GraphQlBigNumber!
+  assets: [PlayerBuyDistributionAsset!]!
+}
+
+type PlayerSellResult {
+  sell_distribution_id: UUID4!
+  assets: [PlayerSellResultItem!]!
+}
+
+type PlayerSellResultItem {
+  asset: Asset!
+  order: Order!
+}
+
+type PlayerBuyResult {
+  buy_distribution_id: UUID4!
+  assets: [PlayerBuyResultItem!]!
+}
+
+type PlayerBuyResultItem {
+  asset: Asset!
+  order: Order!
+}
+
+type PlayerBuyDistributionAsset {
+  asset: Asset!
+  estimate: Estimate!
+}
+
+type DebugCfHeaders {
+  ip: String
+  country: String
+}
+
+type LandingPagePosition {
+  position: Int!
+  ref_code: String!
+}
+
+type LandingPageSignupPayload {
+  ref_code: String
+  check_code: String
+  already_signed_up: Boolean!
+}
+
+type Subscription {
+  testSubscription: Int!
+  pair_chart_change(pair: String, resolution: String): ChartUpdate!
+  pair_orderbook_change(pair: String, resolution: String): Int!
+  pair_recent_trades_change(pair: String): Int!
+  drop_remaining: DropUpdate!
+  my_orders: Boolean
+}
+
+type DropUpdate {
+  drop_id: Int!
+  remaining: GraphQlBigNumber!
+}
+
+type ChartUpdate {
+  time: UnixTimeSeconds!
+  close: Float!
+}
+
+type ChartItem {
+  time: UnixTimeSeconds!
+  open: Float!
+  high: Float!
+  low: Float!
+  close: Float!
+  volume: Float!
+  weighted_average: Float!
+}
+
+type OrderbookItem {
+  amount_base: GraphQlBigNumber!
+  amount_quote: GraphQlBigNumber!
+  price_rounded: GraphQlBigNumber!
+  amm_share: GraphQlBigNumber
+}
+
+type Orderbook {
+  buys: [OrderbookItem!]!
+  sells: [OrderbookItem!]!
+}
+
+type Order {
+  maker_order_id: Int
+  amount_executed: GraphQlBigNumber
+  amount_remaining: GraphQlBigNumber
+  average_price: GraphQlBigNumber
+  received: GraphQlBigNumber
+  fee: GraphQlBigNumber
+}
+
+type Pair {
+  id: Int!
+  id_hr: StringUpperCase!
+  base_id: Int!
+  quote_id: Int!
+  created_at: UnixTimeSeconds!
+  base: Asset!
+  quote: Asset!
+  img: ImageUrl!
+  img_alt: String!
+  price_per_token: Float
+  price_change_24h: Float
+  price_change_24h_pct: Float
+  volume_base_24h: Float
+  volume_quote_24h: Float
+  market_cap: Float
+  recent_trades(count: Int): [RecentTrade!]!
+  recent_trades_v2(count: Int): [RecentTrade!]!
+  orderbook(decimals: Int!, rows: Int): Orderbook!
+  chart(end_time_seconds: Float, window: Int, resolution: String): [ChartItem!]!
+  chart_new(
+    end_time_seconds: Float
+    window: Int
+    resolution: String
+    candle_type: String
+  ): [ChartItem!]!
+  alerts: PairAlerts!
+}
+
+type PairAlerts {
+  price_change: GraphQlBigNumber
+}
+
+input SearchFilter {
+  sport_id: Int!
+}
+
+union SearchResult = Player | Asset | Drop
+
+type Sport {
+  id: Int!
+  id_hr: String!
+  name: String!
+  img: ImageUrl!
+  active: Boolean!
+  ordering: Int!
+  volume_24h: GraphQlBigNumber!
+  change_24h: GraphQlBigNumber!
+  change_24h_pct: GraphQlBigNumber!
+  total_value: GraphQlBigNumber!
+  card_count: Int!
+  pair_count: Int!
+  associated_players(count: Int, sort: String): [Player!]!
+}
+
+type Team {
+  id: Int!
+  id_hr: StringLowerCase!
+  name: String!
+  img: ImageUrl!
+}
+
+type Player {
+  id: Int!
+  id_hr: StringLowerCase
+  name: String!
+  img: ImageUrl!
+  jersey_number: String
+  sport_id: Int!
+  team_id: Int!
+  sport: Sport!
+  team: Team
+  pairs: [Pair!]!
+  asset_count: Int!
+  card_count: Int!
+  volume_24h: GraphQlBigNumber!
+  change_24h: GraphQlBigNumber!
+  change_24h_pct: GraphQlBigNumber!
+  total_value: GraphQlBigNumber!
+  total_value_chart(
+    end_time_seconds: Float
+    window: Int!
+    resolution: String
+    candle_type: String
+  ): [ChartItem!]!
+}
+
+type CardladderData {
+  cl_id: String
+  cl_market_value: GraphQlBigNumber
+  cl_num_sales: Int
+  cl_low_price: GraphQlBigNumber
+  cl_high_price: GraphQlBigNumber
+  cl_average_price: GraphQlBigNumber
+  cl_url: String
+  cl_population: Int
+}
+
+type Asset {
+  id: Int!
+  ticker: String!
+  name: String!
+  img_front: ImageUrl!
+  img_back: ImageUrl!
+  img_alt: String!
+  cardladder: CardladderData
+  supply: GraphQlBigNumber!
+  associated_players: [Player!]!
+  current_user_cost_basis: GraphQlBigNumber
+  current_user_amount: GraphQlBigNumber!
+  current_user_watch_lists: [WatchList!]!
+  price_usd: GraphQlBigNumber!
+  market_cap_usd: GraphQlBigNumber!
+  specs: [Spec!]!
+  pairs: [Pair!]!
+  drops: [Drop!]!
+  pair(ticker_other: String!): Pair
+  individual_assets(limit: Int, offset: Int): [IndividualAsset!]!
+  detailed_description: Markdown
+}
+
+type IndividualAsset {
+  img_front: String!
+  img_back: String!
+  serial: String!
+}
+
+type Spec {
+  key: String!
+  value: String!
+}
+
+type RecentTrade {
+  trade_time: UnixTimeSeconds!
+  type: String!
+  amount: GraphQlBigNumber!
+  price: GraphQlBigNumber!
+}
+
+type CarouselItem {
+  img: ImageUrl!
+  img_alt: String!
+  active: Boolean!
+  target: String
+}
+
+type NewsItem {
+  title: String!
+  target: String!
+  img: ImageUrl!
+  img_alt: String!
+  read_time: Int
+  source: String
+}
+
+type TwoFaSetupPayload {
+  secret: String!
+  recovery: String!
+  otpauthUrl: String!
+}
+
+type AuthPayload {
+  token: String!
+  user_id: UUID4!
+  user: CurrentUser!
+}
+
+type UserRecentTrade {
+  price: GraphQlBigNumber!
+  amount_base: GraphQlBigNumber!
+  amount_quote: GraphQlBigNumber!
+  fee: GraphQlBigNumber!
+  type: String!
+  trade_time: UnixTimeSeconds!
+  pair_id: Int!
+  pair: Pair!
+}
+
+type DropBuy {
+  price: GraphQlBigNumber!
+  amount_base: GraphQlBigNumber!
+  amount_quote: GraphQlBigNumber!
+  fee: GraphQlBigNumber!
+  trade_time: UnixTimeSeconds!
+  asset: Asset!
+}
+
+type CurrentUser {
+  account_id: UUID4!
+  get_all_sessions: [SessionInfo]
+  upgrade_token: String
+  user_info: UserInfo!
+  email: String!
+  email_verified: Boolean!
+  twofa_enabled: Boolean!
+  name: String
+  phone: String
+  birthday: String
+  address_street: String
+  address_city: String
+  address_state: String
+  address_zip: String
+  address_country: String
+  assets: [UserAsset!]!
+  asset(ticker: String): UserAsset
+  transfers(asset_id: Int): [BalanceTransfer!]!
+  fracpack_options: [FracpackOption!]!
+  fracpack_chosen: FracpackOption
+  recent_trades: [UserRecentTrade!]!
+  drop_buys(limit: Int, offset: Int): [DropBuy!]!
+  orders(
+    filter: String!
+    limit: Int
+    offset: Int
+    pair_id_hr: StringUpperCase
+  ): [UserOrder!]!
+  shipping_methods: [AccountShippingMethod!]!
+  inventory_chart(
+    end_time_seconds: Float
+    window: Int!
+    resolution: String!
+  ): [ChartItem!]!
+  inventory_chart_new(
+    end_time_seconds: Float
+    window: Int!
+    resolution: String!
+    candle_type: String
+  ): [ChartItem!]!
+  inventory_value_usd: GraphQlBigNumber!
+  ref_status: RefStatus
+  referral: CurrentUserReferral
+  maker_fee: GraphQlBigNumber
+  taker_fee: GraphQlBigNumber
+  packs: [Pack]
+  email_preferences: EmailPreferences!
+  invites: [InviteCode!]!
+  fracpacks: [FracPack!]!
+  fracpack(id: UUID4!): FracPack
+  cost_basis: GraphQlBigNumber
+  watch_lists: [WatchList!]!
+  watch_list(name: String!): WatchList
+  kyc_level: UserKycState_or_Error!
+  kyc_information: UserKycInformation_or_Error!
+  transaction_history(
+    filter: TransactionHistoryParameters
+  ): [TransactionHistoryReceipts!]!
+  deposit_methods: [CircleDepositMethods!]!
+  withdrawal_methods: [CircleWithdrawalMethods!]!
+  in_app_banners: [InAppBanner!]!
+  permissions: CurrentUserPermissions!
+  deposit_limits: [CircleDepositLimit!]!
+  rewards_state: RewardsState
+}
+
+type CircleDepositLimit {
+  type: CirclePaymentType!
+  enabled: Boolean!
+  deposit_fee: GraphQlBigNumber!
+  withdraw_fee: GraphQlBigNumber!
+  total: CircleDepositLimitValues!
+  remaining: CircleDepositLimitValues!
+}
+
+type CircleDepositLimitValues {
+  min: GraphQlBigNumber!
+  single: GraphQlBigNumber!
+  daily: GraphQlBigNumber!
+  weekly: GraphQlBigNumber!
+  monthly: GraphQlBigNumber!
+  per_account: GraphQlBigNumber
+}
+
+type CurrentUserPermissions {
+  buy_asset: Boolean!
+  sell_asset: Boolean!
+  buy_drop: Boolean!
+  buy_collection: Boolean!
+  sell_collection: Boolean!
+  deposit: Boolean!
+  withdraw: Boolean!
+  sell_with_dibbs: Boolean!
+}
+
+type CurrentUserReferral {
+  number_of_referrals: Int
+  usd_amount_rewarded: GraphQlBigNumber
+  referral_link: String
+  referral_code: String
+  number_of_rewards: Int
+  referrals: [Referral]
+}
+
+type Referral {
+  date: UnixTimeSeconds
+  status: ReferralStatus
+}
+
+enum TOS_status {
+  should_agree_again
+  has_agreed
+  must_agree_before_continuing
+}
+
+enum ReferralStatus {
+  pending
+  completed
+}
+
+enum PaymentType {
+  wire
+  ach
+  credit_card
+}
+
+enum SSOClientType {
+  google
+  apple
+}
+
+enum shipment_status_type {
+  pending_withdraw_wax
+  pending_burn_wax
+  pending_transfer_pwcc
+  completed
+  canceled
+  pending_internal_burn
+}
+
+type AccountShippingMethod {
+  id: UUID4!
+  account_id: UUID4!
+  shipment_method: String!
+  shipment_recipient_address: String!
+}
+
+type InviteCode {
+  code: String!
+}
+
+type UserInfo {
+  email_verified: Boolean!
+  email: String!
+  name: String
+  first_name: String
+  sur_name: String
+  phone: String
+  birthday: String
+  address_street: String
+  address_city: String
+  address_state: String
+  address_zip: String
+  address_country: String
+  address_complement: String
+  twofa_enabled: Boolean!
+}
+
+type Pack {
+  id: UUID4!
+  img: ImageUrl!
+  campaign: UUID4!
+  state: String!
+  time_created: UnixTimeSeconds
+  time_sent: UnixTimeSeconds
+  assets: [PackResultAsset!]!
+}
+
+type PackResultAsset {
+  asset: Asset!
+  asset_id: Int!
+  amount: GraphQlBigNumber!
+}
+
+type UserOrder {
+  order_id: UUID4!
+  price: GraphQlBigNumber!
+  amount: GraphQlBigNumber!
+  remaining: GraphQlBigNumber!
+  pair_id: Int!
+  pair: Pair!
+  type: String!
+  cancelled: Boolean!
+  trade_time: UnixTimeSeconds!
+}
+
+type BalanceTransfer {
+  sent: Boolean!
+  amount: GraphQlBigNumber!
+  reason: String!
+  time: UnixTimeSeconds!
+  asset_id: Int!
+  asset: Asset!
+}
+
+type RefStatus {
+  ref_code: String!
+  num_referred: Int!
+  usd_earned: GraphQlBigNumber
+  rank: Int!
+}
+
+type UserAsset {
+  amount: GraphQlBigNumber!
+  total_value: GraphQlBigNumber
+  asset_id: Int!
+  ticker: String!
+  name: String!
+  img_front: ImageUrl!
+  pairs: [Pair!]!
+  asset: Asset
+}
+
+type UserFlag {
+  email: String!
+  flag_name: String!
+  value: String
+}
+
+type Drop {
+  id: Int!
+  id_hr: StringLowerCase!
+  running: Boolean!
+  type: String
+  start_time: Int!
+  end_time: Int!
+  asset_value_usd: GraphQlBigNumber!
+  supply_left: GraphQlBigNumber!
+  max_current_user_can_spend: GraphQlBigNumber
+  fee_fraction: GraphQlBigNumber!
+  asset: Asset!
+  asset_id: Int!
+}
+
+type InternalDrop {
+  id: Int!
+  id_hr: StringLowerCase!
+  listed: Boolean!
+  finished: Boolean!
+  type: String
+  start_time: Int!
+  end_time: Int!
+  asset_value_usd: GraphQlBigNumber!
+  supply_left: GraphQlBigNumber!
+  asset: Asset!
+  asset_id: Int!
+  weight: Int
+  max_fraction_per_user: GraphQlBigNumber
+  fee_fraction: GraphQlBigNumber
+  originator_id: UUID4
+  asset_amount_originator: GraphQlBigNumber
+  asset_amount_liquidity_provider: GraphQlBigNumber
+  asset_amount_initial_supply: GraphQlBigNumber
+  pinned_weight: GraphQlBigNumber
+}
+
+type EducationalArticle {
+  title: String!
+  sub_title: String!
+  target: String!
+  img: ImageUrl!
+  img_alt: String!
+}
+
+type EmailPreferences {
+  news: Boolean
+  offers: Boolean
+  order_summary: Boolean
+  new_referrals: Boolean
+  deposits: Boolean
+  account_updates: Boolean
+  login: Boolean
+}
+
+type SessionInfo {
+  id: UUID4!
+  initial_ip: String
+  current_ip: String
+  browser_agent: String
+  long_session: Boolean!
+  country: String
+  expire_at: UnixTimeMilliSeconds!
+  time_added: UnixTimeMilliSeconds!
+  current: Boolean
+}
+
+type WatchListAsset {
+  asset: Asset!
+  asset_id: Int!
+  added: UnixTimeSeconds!
+}
+
+type WatchList {
+  id: UUID4!
+  name: String!
+  assets(count: Int, offset: Int): [WatchListAsset!]!
+}
+
+type MintRequest {
+  id: Int!
+  mint_creator: UUID4!
+  mint_approver: UUID4
+  status: mint_status!
+  asset_submission: AssetSubmission!
+  amount_to_dibbs: Float!
+  amount_to_originator: Float!
+  card_price: Float!
+  time_added: UnixTimeMilliSeconds!
+}
+
+type AssetSubmission {
+  id: Int!
+  name: String!
+  img_front: String!
+  img_back: String!
+  asset_serial: AssetSerial!
+  asset_id: Int
+}
+
+type AssetSerial {
+  id: Int!
+  serial_id: String!
+  serial_type: serial_types!
+  grade: String
+}
+
+enum asset_location {
+  pwcc
+  alt
+}
+
+enum serial_type {
+  PSA
+  BGS
+  SGC
+  BVG
+  CGC
+  WAX_BOX
+}
+
+enum mint_status {
+  pending
+  approved
+  denied
+}
+
+enum serial_types {
+  PSA
+  BGS
+  SGC
+  BVG
+  CGC
+  WAX_BOX
+}
+
+enum TransactionHistoryFilter {
+  orders
+  transfers
+  custody
+}
+
+enum UserOrderStatus {
+  completed
+  active
+}
+
+enum UserOrderTransactionType {
+  buy
+  sell
+}
+
+enum TradeType {
+  instant
+  limit
+}
+
+union TransactionHistoryReceipts =
+    DropReceipt
+  | FracPackReceipt
+  | UserOrderReceipt
+  | CirclePayment
+  | CircleWithdrawal
+
+input TransactionHistoryParameters {
+  offset: Int
+  count: Int
+  transaction_history_filter: TransactionHistoryFilter
+  userOrderStatus: UserOrderStatus
+  userOrderTransactionType: UserOrderTransactionType
+}
+
+union UserKycState_or_Error = UserKycState | DibbsError
+
+union UserKycInformation_or_Error = UserKycInformation | DibbsError
+
+union CurrentUser_or_Error = CurrentUser | DibbsError
+
+input AttemptLevelUpParameters {
+  first_name: String
+  sur_name: String
+  address_street: String
+  address_city: String
+  address_state: String
+  address_complement: String
+  address_zip: String
+  address_country: String
+  phone: String
+  birthday: String
+  ssn: String
+  docv: UUID4
+}
+
+type UserKycState {
+  id: UUID4!
+  account_id: UUID4!
+  current_level_value: KycLevelBasicInfo!
+  next_level_value: KycLevelBasicInfo
+  kyc_level_status: KycLevelStatus!
+  contact_customer_support_reason: String
+  reject_message: String
+  customer_support_commentary: String
+}
+
+type KycLevelBasicInfo {
+  value: Int!
+  description: String!
+  required_actions_to_reach_this_level: [KycAction!]
+  pending_actions_to_reach_this_level: [KycAction]
+}
+
+enum KycLevelStatus {
+  frozen
+  accept
+  refer
+  resubmit
+  contact_customer_support
+  queue
+  request_poa
+  poa_review_pending
+}
+
+enum KycLevelStatusRetoolFilter {
+  frozen
+  accept
+  refer
+  resubmit
+  contact_customer_support
+  queue
+  request_poa
+  poa_review_pending
+  referred
+}
+
+enum KycDecision {
+  accept
+  refer
+  review
+  reject
+  resubmit
+}
+
+enum KycAction {
+  name
+  address
+  date_of_birth
+  ssn
+  phone
+  docv
+}
+
+type KycLevelDefinition {
+  id: UUID4!
+  value: Int!
+  description: String!
+  max_retries: Int!
+  required_actions_to_reach_this_level: [KycAction!]
+}
+
+type UserKycInformation {
+  account_id: UUID4
+  name: String
+  first_name: String
+  sur_name: String
+  address_street: String
+  address_complement: String
+  address_city: String
+  address_state: String
+  address_zip: String
+  address_country: String
+  phone: String
+  birthday: String
+}
+
+enum KycAttemptState {
+  pending
+  approved
+  denied
+  failed
+}
+
+type UserKycAttempt {
+  id: UUID4!
+  account_id: UUID4!
+  socure_reference_id: UUID4
+  kyc_current_level: Int!
+  kyc_attempted_level: Int!
+  state: KycAttemptState!
+  created_at: UnixTimeSeconds!
+  updated_at: UnixTimeSeconds!
+  socure_request_response: JSONObject
+  attempted_level_reject_codes: [String!]
+  attempted_level_reject_reasons: [String!]
+  callback_id: UUID4
+  socure_decision: KycDecision
+}
+
+enum KycCallbackType {
+  docv
+  watchlist
+}
+
+type KycCallback {
+  id: UUID4!
+  account_id: UUID4
+  kyc_callback_type: KycCallbackType!
+  socure_callback_id: UUID4
+  socure_callback_event_id: UUID4
+  created_at: UnixTimeSeconds!
+  socure_callbacks: [JSONObject!]
+  socure_followup_requests: [JSONObject!]
+}
+
+type DropReceipt {
+  id: UUID4!
+  submitted_time: UnixTimeSeconds!
+  completed_time: UnixTimeSeconds
+  quote_amount: GraphQlBigNumber!
+  base_amount: GraphQlBigNumber!
+  fee_amount: GraphQlBigNumber!
+  price: GraphQlBigNumber!
+  drop: Drop!
+}
+
+type FracPackReceiptAsset {
+  asset: Asset!
+}
+
+type FracPackReceipt {
+  id: UUID4!
+  status: FracPackState!
+  received_time: UnixTimeSeconds!
+  opened_time: UnixTimeSeconds
+  price: GraphQlBigNumber!
+  base_amount: GraphQlBigNumber!
+  cards_inside: [FracPackCard!]!
+}
+
+type UserOrderReceiptFill {
+  filled_base_amount: GraphQlBigNumber!
+  filled_quote_amount: GraphQlBigNumber!
+  asset_price: GraphQlBigNumber!
+  date: UnixTimeSeconds!
+}
+
+type UserOrderReceipt {
+  id: UUID4!
+  pair_id: Int!
+  pair: Pair!
+  order_status: UserOrderStatus!
+  submitted_time: UnixTimeSeconds!
+  completed_time: UnixTimeSeconds
+  is_buy: Boolean!
+  is_cancelled: Boolean!
+  quote_amount: GraphQlBigNumber!
+  base_amount: GraphQlBigNumber!
+  trade_type: TradeType!
+  fee_amount: GraphQlBigNumber!
+  total_amount: GraphQlBigNumber!
+  filled_amount: GraphQlBigNumber!
+  proceeds: GraphQlBigNumber!
+  average_price: GraphQlBigNumber!
+  order_fills: [UserOrderReceiptFill!]
+}
+
+type NotificationCenterChannelGroup {
+  title: String!
+  subtitle: String!
+  active: Boolean!
+  channels: [NotificationCenterChannel]!
+  id: Int!
+}
+
+type NotificationCenterChannel {
+  title: String!
+  iterable_id: Int!
+  active: Boolean!
+  subscribed: Boolean!
+  group_id: Int!
+}
+
+type RewardsState {
+  daily_claims: DailyRewardsState!
+  balance: GraphQlBigNumber!
+  never_claimed_before: Boolean!
+}
+
+type DailyRewardsState {
+  days: [DailyReward!]!
+  next_claim_start: UnixTimeMilliSeconds!
+  next_claim_end: UnixTimeMilliSeconds!
+  in_streak: Boolean!
+}
+
+enum RewardState {
+  claimed
+  can_be_claimed
+  upcoming
+}
+
+type DailyReward {
+  state: RewardState!
+  title: String!
+  amount: GraphQlBigNumber!
+}
+
+type DailyRewardClaim {
+  amount: GraphQlBigNumber!
+  rewards_state: RewardsState!
+}
+
+type RewardsShop {
+  items: [RewardsShopItem!]!
+  disclaimer: Markdown!
+}
+
+enum RewardsShopItemType {
+  fracpack
+}
+
+type RewardsShopItem {
+  id: UUID4!
+  title: String!
+  img: ImageUrl!
+  type: RewardsShopItemType!
+  cost: GraphQlBigNumber!
+  value: GraphQlBigNumber!
+  stock: Int!
+  color_glow_hex: String
+}
+
+enum RewardsShopItemRefreshType {
+  weekly
+}
+
+type InternalRewardsShopItem {
+  id: UUID4!
+  title: String!
+  img: ImageUrl!
+  hidden: Boolean!
+  type: RewardsShopItemType!
+  cost: GraphQlBigNumber!
+  value: GraphQlBigNumber!
+  campaign_id: UUID4
+  remaining_stock: Int!
+  refresh_stock_amount: Int
+  refresh_type: RewardsShopItemRefreshType
+  next_stock_refresh: UnixTimeSeconds
+  color_glow_hex: String
+}
