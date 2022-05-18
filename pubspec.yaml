@@ -1,10 +1,10 @@
 name: dibbs_flutter_cli
-description: A starting point for Dart libraries or applications.
-version: 1.0.4
+description: "Dibbs CLI tool"
+version: 1.0.7
 repository: https://github.com/denisviana/dibbs_flutter_cli
 
 environment:
-  sdk: '>=2.14.3 <3.0.0'
+  sdk: '>=2.16.2 <3.0.0'
 
 executables:
   dibbs: main
@@ -20,8 +20,15 @@ dependencies:
   dart_console: ^1.0.0
   tuple: ^2.0.0
   pubspec_yaml: ^3.1.0
-  fhir_yaml: ^0.5.2
+  fhir_yaml: ^0.7.0
   rxdart: ^0.27.3
+  gql: ^0.13.1
+  glob: ^2.0.2
+  build: ^2.3.0
+  deep_collection: ^1.0.2
+  ms_map_utils: ^1.1.0
+  flinq: ^2.0.2
+  decimal: ^2.1.0
 
 dev_dependencies:
   test: ^1.20.1

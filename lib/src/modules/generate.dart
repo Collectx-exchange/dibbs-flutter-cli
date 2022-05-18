@@ -1,9 +1,10 @@
 import 'dart:async';
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:dibbs_flutter_cli/src/enums/create_use_case_enums.dart';
+import 'package:dibbs_flutter_cli/src/modules/graphql_mock_generator/operation_type_definition_visitor.dart';
 import 'package:dibbs_flutter_cli/src/templates/generator/prompts/create_data_source.dart';
+import 'package:dibbs_flutter_cli/src/templates/generator/prompts/create_data_source_call_prompt.dart';
 import 'package:dibbs_flutter_cli/src/templates/generator/prompts/create_use_case_prompt.dart';
 import 'package:dibbs_flutter_cli/src/templates/templates.dart' as templates;
 import 'package:dibbs_flutter_cli/src/utils/file_utils.dart' as file_utils;
@@ -11,14 +12,11 @@ import 'package:dibbs_flutter_cli/src/utils/object_generate.dart';
 import 'package:dibbs_flutter_cli/src/utils/output_utils.dart' as output;
 import 'package:dibbs_flutter_cli/src/utils/utils.dart';
 import 'package:path/path.dart';
-import 'package:recase/recase.dart';
 
 import '../utils/utils.dart';
 import 'generate_data_sources.dart';
 import 'generate_page.dart';
 import 'graphql_mock_generator/generate_graphql_json_mocks.dart';
-
-JsonEncoder encoder = JsonEncoder.withIndent('  ');
 
 class Generate {
   static Future<void> feature(
@@ -205,98 +203,54 @@ class Generate {
 
   static Future<void> graphQlJsonMock({required String docPath, required String path}) async {
     output.msg('Creating GraphQL Json Mock for file $docPath');
-    try {
-      final rootPath = docPath.substring(0, docPath.indexOf('/lib'));
-      mainDirectory = rootPath;
-      final entity = await generateGraphQLJsonMock(docPath: docPath);
-
-      final file = File('$rootPath/test/mocks/graphql_json_mocks.dart');
-      final name = '${ReCase(entity.name).camelCase}Mock';
-
-      if (!file.existsSync()) {
-        file.createSync(recursive: true);
-        file.writeAsStringSync(
-          templates.graphQlJsonMockGenerator(
-            ObjectGenerate(
-              name: name,
-              type: 'mock',
-              packageName: await getNamePackage(),
-              additionalInfo: entity.data,
-            ),
-          ),
-        );
-      } else {
-        final content = file.readAsStringSync();
-        if (content.contains(name)) {
-          output.error("A function $name already exists in this file");
-          return;
-        } else {
-          file.writeAsStringSync(
-            templates.graphQlJsonMockGenerator(
-              ObjectGenerate(
-                name: name,
-                type: 'mock',
-                packageName: await getNamePackage(),
-                additionalInfo: entity.data,
-              ),
-            ),
-            mode: FileMode.append,
-          );
-          output.success('$name created');
-          output.success(encoder.convert(entity.data));
-        }
-      }
-    } on Exception catch (e) {
-      output.error(e.toString());
-    }
-  }
-}
-
-void main() async {
-  final docPath =
-      '/Users/denisviana/AndroidStudioProjects/dibbs_flutter_cli/lib/feature_toggle.graphql';
-  output.msg('Creating GraphQL Json Mock for file $docPath');
-  try {
     final rootPath = docPath.substring(0, docPath.indexOf('/lib'));
     mainDirectory = rootPath;
     final entity = await generateGraphQLJsonMock(docPath: docPath);
+    await file_utils.createGraphQLJsonMockFile(
+      path: rootPath,
+      name: entity.name,
+      type: 'mocks',
+      data: entity.data,
+      generator: templates.graphQlJsonMockGenerator,
+    );
 
-    final file = File('$rootPath/test/mocks/graphql_json_mocks.dart');
+    final dataSourceName = createDataSourceCallPrompt();
 
-    if (!file.existsSync()) {
-      final name = '${ReCase(entity.name).camelCase}Mock';
-      file.createSync(recursive: true);
-      file.writeAsStringSync(
-        templates.graphQlJsonMockGenerator(
-          ObjectGenerate(
-            name: name,
-            type: 'mock',
-            packageName: await getNamePackage(),
-            additionalInfo: entity.data,
-          ),
-        ),
-      );
-    } else {
-      final content = file.readAsStringSync();
-      final name = '${ReCase(entity.name).camelCase}Mock';
-      if (content.contains(name)) {
-        output.error("A function $name already exists in this file");
-        return;
-      } else {
-        file.writeAsStringSync(
-          templates.graphQlJsonMockGenerator(
-            ObjectGenerate(
-              name: name,
-              type: 'mock',
-              packageName: await getNamePackage(),
-              additionalInfo: entity.data,
-            ),
-          ),
-          mode: FileMode.append,
-        );
-      }
+    if (dataSourceName.isNotEmpty) {
+      await dataSourceCall(dataSourceName: dataSourceName, entity: entity, rootPath: rootPath);
     }
-  } on Exception catch (e) {
-    output.error(e.toString());
+  }
+
+  static Future<void> dataSourceCall({
+    required String dataSourceName,
+    required GraphQLJsonMockEntity entity,
+    required String rootPath,
+  }) async {
+    mainDirectory = rootPath;
+    final nameWithoutSuffix = dataSourceName.replaceAll('_local', '').replaceAll('_remote', '');
+    final suffix =
+        dataSourceName.substring(dataSourceName.indexOf('_'), dataSourceName.length).replaceAll(
+              '_',
+              '',
+            );
+    var abstractionPath =
+        '$rootPath/lib/core/data/data_sources/$nameWithoutSuffix/$suffix/${dataSourceName}_data_source.dart';
+    var implementationPath =
+        '$rootPath/lib/core/data/data_sources/$nameWithoutSuffix/$suffix/${dataSourceName}_data_source_implementation.dart';
+    var implementationTestPath =
+        '$rootPath/test/core/data/data_sources/$nameWithoutSuffix/$suffix/${dataSourceName}_data_source_implementation_test.dart';
+
+    print(implementationTestPath);
+
+    await file_utils.createFunction(
+      abstractionPath,
+      implementationPath,
+      implementationTestPath,
+      '${dataSourceName}_data_source_implementation',
+      entity,
+      templates.dataSourceAbstractionCallGenerator,
+      templates.dataSourceImplementationCallGenerator,
+      templates.dataSourceCallUnitTest,
+    );
   }
 }

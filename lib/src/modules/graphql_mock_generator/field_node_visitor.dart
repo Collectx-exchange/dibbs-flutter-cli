@@ -12,25 +12,32 @@ class FieldNodeVisitor extends ast.SimpleVisitor<Map<String, dynamic>> {
   FieldNodeVisitor(this.schemaTypeVisitor);
 
   @override
-  Map<String, dynamic>? visitFieldNode(ast.FieldNode node,
+  Map<String, dynamic>? visitFieldNode(ast.FieldNode? node,
       {Map<String, dynamic>? map, TypeNode? typeNode}) {
     final objectTypeDefinitionNode = schemaTypeVisitor.objectTypeDefinitionByName(
-      name: node.name.value,
+      name: node?.name.value ?? '',
       typeNode: typeNode,
     );
 
     map ??= <String, dynamic>{};
 
     /// Check if map already contains the node
-    if (!keyExists(map, node.name.value)) map.addAll({node.name.value: {}});
+    if (!keyExists(map, node?.name.value ?? '')) {
+      map.addAll(
+        {
+          node?.name.value ?? '': {},
+        },
+      );
+    }
 
     ///Check if node has children
-    if (node.selectionSet != null) {
-      node.selectionSet!.selections.forEach((element) {
+    if (node?.selectionSet != null) {
+      node?.selectionSet?.selections.forEach((element) {
         ast.FieldNode? fieldNode;
         ast.InlineFragmentNode? inlineFragmentNode;
         String typeName = '';
 
+        ///Check if is Type Union
         if (element is ast.InlineFragmentNode) {
           if (element.typeCondition?.on.name.value == "DibbsError") {
             return;
@@ -43,13 +50,14 @@ class FieldNodeVisitor extends ast.SimpleVisitor<Map<String, dynamic>> {
             typeNode = inlineFragmentNode.typeCondition?.on;
           }
 
+          ///Visit children of the current type union node
           inlineFragmentNode.selectionSet.selections.forEach((element) {
             final fieldNode = element as ast.FieldNode;
 
             final fieldDefinitionNode = objectTypeDefinitionNode.fields
                 .firstOrNullWhere((element) => element.name.value == fieldNode.name.value);
 
-            ///Get node type
+            ///Get type node
             if (fieldDefinitionNode != null) {
               typeNode = fieldDefinitionNode.type;
             }
@@ -94,7 +102,7 @@ class FieldNodeVisitor extends ast.SimpleVisitor<Map<String, dynamic>> {
           final fieldDefinitionNode = objectTypeDefinitionNode.fields
               .firstOrNullWhere((element) => element.name.value == fieldNode?.name.value);
 
-          ///Get node type
+          ///Get type node
           if (fieldDefinitionNode != null) {
             typeNode = fieldDefinitionNode.type;
           }
@@ -137,25 +145,5 @@ class FieldNodeVisitor extends ast.SimpleVisitor<Map<String, dynamic>> {
     }
 
     return map;
-  }
-
-  Map<String, dynamic>? visitInlineFragmentNod(ast.InlineFragmentNode node,
-      {Map<String, dynamic>? map, TypeNode? typeNode}) {
-    node.selectionSet.selections.forEach((element) {
-      final fieldNode = element as ast.FieldNode;
-      if (fieldNode.selectionSet != null) {
-        visitFieldNode(fieldNode, map: map, typeNode: typeNode);
-      }
-    });
-    return map;
-  }
-}
-
-class OperationDefinitionNodeVisitor extends ast.RecursiveVisitor {
-  late final String name;
-
-  @override
-  void visitOperationDefinitionNode(ast.OperationDefinitionNode node) {
-    name = node.name?.value ?? '';
   }
 }

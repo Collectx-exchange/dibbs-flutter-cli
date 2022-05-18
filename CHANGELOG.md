@@ -1,3 +1,15 @@
+## 1.0.6
+
+- Generate data source call and unit test
+
+## 1.0.6
+
+- Generate json mock from GraphQL document
+
+## 1.0.5
+
+- End Run command when a script command fail
+
 ## 1.0.4
 
 - Fix Run command

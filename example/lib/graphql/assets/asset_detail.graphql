@@ -1,0 +1,44 @@
+query AssetDetail(
+    $pairName: StringUpperCase!
+    $chartEndTimeSeconds: Float!
+    $chartWindow: Int!
+    $chartResolution: String!
+) {
+    assetPair: pair(pair: $pairName) {
+        id
+        id_hr
+        img
+        img_alt
+        price_per_token
+        price_change_24h
+        price_change_24h_pct
+        volume_base_24h
+        volume_quote_24h
+        market_cap
+        quote: quote {
+            id
+            ticker
+            name
+            img_front
+            supply
+            current_user_amount
+        }
+        chart: chart_new(
+            candle_type: "pair_price_snapshot_candle"
+            end_time_seconds: $chartEndTimeSeconds
+            window: $chartWindow
+            resolution: $chartResolution
+        ) {
+            time
+            open
+            high
+            low
+            close
+            volume
+            weighted_average
+        }
+        alerts {
+            price_change
+        }
+    }
+}

@@ -9,6 +9,8 @@
       <excludeFolder url="file://$MODULE_DIR$/dibbs_cli_example/.pub" />
       <excludeFolder url="file://$MODULE_DIR$/dibbs_cli_example/.dart_tool" />
       <excludeFolder url="file://$MODULE_DIR$/dibbs_cli_example/build" />
+      <excludeFolder url="file://$MODULE_DIR$/dibbs_cli_example/.idea" />
+      <excludeFolder url="file://$MODULE_DIR$/.dibbs" />
     </content>
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="Dart SDK" level="project" />

@@ -1,3 +1,4 @@
+import 'package:decimal/decimal.dart';
 import 'package:deep_collection/deep_collection.dart';
 import 'package:gql/ast.dart';
 
@@ -7,33 +8,89 @@ dynamic fillPropertyByType(String type, EnumTypeDefinitionNode? enumType) {
   }
 
   switch (type) {
-    case "UUID4":
-      return "id";
-    case "GraphQlBigNumber":
+    case 'UUID4':
+      return 'id';
+    case 'GraphQlBigNumber':
       return '123456789';
-    case "Int":
+    case 'Int':
       return 123;
-    case "ImageUrl":
-      return "https://img.dibbscdn.com/4f2827a0-d556-4b82-88bc-4d0661126672";
-    case "String":
-      return "string";
-    case "UnixTimeSeconds":
+    case 'ImageUrl':
+      return 'https://img.dibbscdn.com/4f2827a0-d556-4b82-88bc-4d0661126672';
+    case 'String':
+      return 'string';
+    case 'UnixTimeSeconds':
       return 111111;
-    case "UnixTimeMilliSeconds":
+    case 'UnixTimeMilliSeconds':
       return 111111;
-    case "Upload":
-      return "Upload";
-    case "StringLowerCase":
-      return "stringLowerCase";
-    case "StringUpperCase":
-      return "STRING_UPPER_CASE";
-    case "Markdown":
-      return "<p>Markdown</p>";
-    case "Boolean":
+    case 'Upload':
+      return 'Upload';
+    case 'StringLowerCase':
+      return 'stringLowerCase';
+    case 'StringUpperCase':
+      return 'STRING_UPPER_CASE';
+    case 'Markdown':
+      return '<p>Markdown</p>';
+    case 'Boolean':
       return true;
-    case "JSONObject":
+    case 'Float':
+      return 0.15;
+    case 'JSONObject':
     default:
       return {};
+  }
+}
+
+dynamic fillDartPropertyByType(String type) {
+  switch (type) {
+    case "String":
+    case "StringLowerCase":
+    case "StringUpperCase":
+    case "Markdown":
+    case "ImageUrl":
+    case "Upload":
+    case "UUID4":
+      return "String";
+    case "GraphQlBigNumber":
+      return Decimal.zero;
+    case "Int":
+      return 123;
+    case "UnixTimeSeconds":
+    case "UnixTimeMilliSeconds":
+      return DateTime.now();
+    case "Boolean":
+      return true;
+    case "Float":
+      return 0.15;
+    case "JSONObject":
+    default:
+      return '{}';
+  }
+}
+
+String dartPropertyName(String type) {
+  switch (type) {
+    case "String":
+    case "StringLowerCase":
+    case "StringUpperCase":
+    case "Markdown":
+    case "ImageUrl":
+    case "Upload":
+    case "UUID4":
+      return "String";
+    case "GraphQlBigNumber":
+      return 'Decimal';
+    case "Int":
+      return 'int';
+    case "UnixTimeSeconds":
+    case "UnixTimeMilliSeconds":
+      return 'DateTime';
+    case "Boolean":
+      return 'bool';
+    case "Float":
+      return 'double';
+    case "JSONObject":
+    default:
+      return '{}';
   }
 }
 
@@ -119,17 +176,7 @@ Map<String, dynamic> deepSearchByKey(
       });
 }
 
-String getTypeName(TypeNode? type) {
-  var typeName = '';
-
-  if (type == null) return typeName;
-  if (type is NamedTypeNode) {
-    typeName = type.name.value;
-  } else if (type is ListTypeNode) {
-    typeName = (type.type as NamedTypeNode).name.value;
-  }
-  return typeName;
-}
+String getTypeName(TypeNode? type) => type.toName ?? '';
 
 extension TypeNodeExtension on TypeNode? {
   String? get toName {

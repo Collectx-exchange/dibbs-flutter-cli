@@ -1,10 +1,15 @@
+import 'dart:convert';
 import 'dart:io';
 
+import 'package:dibbs_flutter_cli/src/modules/graphql_mock_generator/operation_type_definition_visitor.dart';
 import 'package:dibbs_flutter_cli/src/utils/output_utils.dart' as output;
 import 'package:dibbs_flutter_cli/src/utils/utils.dart';
+import 'package:recase/recase.dart';
 
 import 'local_save_log.dart';
 import 'object_generate.dart';
+
+JsonEncoder encoder = JsonEncoder.withIndent('  ');
 
 Future<void> createFile(
   String path,
@@ -30,8 +35,7 @@ Future<void> createFile(
     dir = Directory(path);
   }
 
-  final file =
-      File('${dir.path}/${name}_${type.replaceAll("_complete", "")}.dart');
+  final file = File('${dir.path}/${name}_${type.replaceAll("_complete", "")}.dart');
   final fileTest = File(
       '${dir.path.replaceFirst("lib/", "test/")}/${name}_${type.replaceAll("_complete", "")}_test.dart');
 
@@ -96,6 +100,152 @@ Future<void> createFile(
   }
 
   output.success('$type created');
+}
+
+Future<void> createGraphQLJsonMockFile(
+    {required String path,
+    required String name,
+    required String type,
+    required Map<String, dynamic> data,
+    required Function(ObjectGenerate) generator}) async {
+  try {
+    final file = File('$path/test/mocks/graphql_json_mocks.dart');
+    final formattedName = '${ReCase(name).camelCase}Mock';
+
+    if (!file.existsSync()) {
+      file.createSync(recursive: true);
+      file.writeAsStringSync(
+        generator(
+          ObjectGenerate(
+            name: formattedName,
+            type: type,
+            packageName: await getNamePackage(),
+            additionalInfo: data,
+          ),
+        ),
+      );
+    } else {
+      final content = file.readAsStringSync();
+      if (content.contains(formattedName)) {
+        output.error("A function $formattedName already exists in this file");
+        return;
+      } else {
+        file.writeAsStringSync(
+          generator(
+            ObjectGenerate(
+              name: formattedName,
+              type: type,
+              packageName: await getNamePackage(),
+              additionalInfo: data,
+            ),
+          ),
+          mode: FileMode.append,
+        );
+        output.success('$name created');
+        output.success(encoder.convert(data));
+      }
+    }
+  } on Exception catch (e) {
+    output.error(e.toString());
+  }
+}
+
+Future<void> createFunction(
+  String abstractionPath,
+  String implementationPath,
+  String implementationTestPath,
+  String formattedName,
+  GraphQLJsonMockEntity entity,
+  Function(ObjectGenerate) abstractionGenerator,
+  Function(ObjectGenerate) implementationGenerator,
+  Function(ObjectGenerate, String name) implementationTestGenerator,
+) async {
+  output.msg('Creating function ${entity.name}...');
+  final package = await getNamePackage();
+
+  final abstractionFile = File(abstractionPath);
+  final implementationFile = File(implementationPath);
+  final implementationTestFile = File(implementationTestPath);
+
+  if (!abstractionFile.existsSync()) {
+    output.error('Data Source Abstraction file not found');
+    exit(1);
+  }
+
+  if (!implementationFile.existsSync()) {
+    output.error('Data Source Implementation file not found');
+    exit(1);
+  }
+
+  LocalSaveLog().add(abstractionFile.path);
+  LocalSaveLog().add(implementationFile.path);
+
+  var abstractionFileContent = abstractionFile.readAsStringSync();
+  abstractionFileContent = abstractionFileContent.replaceRange(
+    abstractionFileContent.lastIndexOf('}'),
+    abstractionFileContent.length,
+    '',
+  );
+
+  abstractionFile.writeAsStringSync(
+    abstractionFileContent +
+        abstractionGenerator(
+          ObjectGenerate(
+            name: ReCase(entity.name).camelCase,
+            type: '',
+            packageName: package,
+            additionalInfo: entity,
+          ),
+        ),
+    mode: FileMode.write,
+  );
+
+  var implementationFileContent = implementationFile.readAsStringSync();
+  implementationFileContent = implementationFileContent.replaceRange(
+    implementationFileContent.lastIndexOf('}'),
+    implementationFileContent.length,
+    '',
+  );
+
+  implementationFile.writeAsStringSync(
+    implementationFileContent +
+        implementationGenerator(
+          ObjectGenerate(
+            name: ReCase(entity.name).camelCase,
+            type: '',
+            packageName: package,
+            additionalInfo: entity,
+          ),
+        ),
+    mode: FileMode.write,
+  );
+
+  if (implementationTestFile.existsSync()) {
+    var implementationTestContent = implementationTestFile.readAsStringSync();
+    implementationTestContent = implementationTestContent.replaceRange(
+      implementationTestContent.lastIndexOf('}'),
+      implementationTestContent.length,
+      '',
+    );
+
+    implementationTestFile.writeAsStringSync(
+      implementationTestContent +
+          implementationTestGenerator(
+            ObjectGenerate(
+              name: ReCase(entity.name).camelCase,
+              type: '',
+              packageName: package,
+              additionalInfo: entity,
+            ),
+            formattedName,
+          ),
+      mode: FileMode.write,
+    );
+  }
+
+  formatFiles([implementationFile, abstractionFile, implementationTestFile]);
+
+  output.success('Function created');
 }
 
 void formatFiles(List<File> files) {

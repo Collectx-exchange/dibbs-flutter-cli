@@ -44,3 +44,23 @@ int selectOption(String title, List<String> options) {
   }
   return -1;
 }
+
+String typeValue(String title) {
+  stdin.echoMode = false;
+  stdin.lineMode = false;
+  var console = Console();
+  var isRunning = true;
+  String? value = '';
+
+  while (isRunning) {
+    print('\x1B[2J\x1B[0;0H');
+    output.title('Dibbs Flutter CLI Interative\n');
+    output.warn(title);
+
+    print('Press \'Esc\' key to quit.');
+
+    value = console.readLine(cancelOnEscape: true);
+
+    return value ?? '';
+  }
+}

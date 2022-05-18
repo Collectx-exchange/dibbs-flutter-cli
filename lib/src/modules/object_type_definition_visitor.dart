@@ -13,16 +13,6 @@ class SchemaVisitor extends RecursiveVisitor {
   Iterable<UnionTypeDefinitionNode> unionTypeDefinitionNodes = [];
 
   @override
-  void visitScalarTypeDefinitionNode(ScalarTypeDefinitionNode node) {
-    super.visitScalarTypeDefinitionNode(node);
-  }
-
-  @override
-  void visitDocumentNode(DocumentNode node) {
-    super.visitDocumentNode(node);
-  }
-
-  @override
   void visitFieldDefinitionNode(FieldDefinitionNode node) {
     fieldDefinitionNodes = fieldDefinitionNodes.followedBy([node]);
     super.visitFieldDefinitionNode(node);
