@@ -1,7 +1,7 @@
 name: Sonar Scanner
 on:
   pull_request:
-    branches: [develop]
+    branches: [main]
 jobs:
   cleaner:
     runs-on: dibbs-linux
