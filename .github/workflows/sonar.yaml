@@ -32,4 +32,4 @@ jobs:
           githubToken: ${{ secrets.GITHUB_TOKEN }}
           host: http://107.20.97.212
           token: ${{ secrets.SONARQUBE }}
-          projectKey: "dibbs-backend"
+          projectKey: "dibbs-flutter-cli"
