@@ -1,0 +1,35 @@
+name: Sonar Scanner
+on:
+  pull_request:
+    branches: [develop]
+jobs:
+  cleaner:
+    runs-on: dibbs-linux
+    steps:
+      - name: Runner workspace path
+        run: |
+          echo "Cleaning up previous run"
+          sudo rm -rf "${{ github.workspace }}"
+
+  SonarScanner:
+    runs-on: dibbs-linux
+    name: Sonar Scanner
+    needs: cleaner
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '2.8.0'
+          channel: 'stable'
+
+      - name: Scan code
+        uses: vtex/action-sonarqube@main
+        with:
+          githubToken: ${{ secrets.GITHUB_TOKEN }}
+          host: http://107.20.97.212
+          token: ${{ secrets.SONARQUBE }}
+          projectKey: "dibbs-backend"
