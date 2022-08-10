@@ -1,6 +1,6 @@
 name: dibbs_flutter_cli
 description: "Dibbs CLI tool"
-version: 1.0.7
+version: 1.0.8
 repository: https://github.com/denisviana/dibbs_flutter_cli
 
 environment:

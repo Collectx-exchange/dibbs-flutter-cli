@@ -1,3 +1,7 @@
+## 1.0.8
+
+- Fix data source path when generating from graphql files
+
 ## 1.0.6
 
 - Generate data source call and unit test
