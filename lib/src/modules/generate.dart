@@ -229,18 +229,13 @@ class Generate {
     mainDirectory = rootPath;
     final nameWithoutSuffix = dataSourceName.replaceAll('_local', '').replaceAll('_remote', '');
     final suffix =
-        dataSourceName.substring(dataSourceName.indexOf('_'), dataSourceName.length).replaceAll(
-              '_',
-              '',
-            );
+        dataSourceName.substring(dataSourceName.lastIndexOf('_') + 1, dataSourceName.length);
     var abstractionPath =
         '$rootPath/lib/core/data/data_sources/$nameWithoutSuffix/$suffix/${dataSourceName}_data_source.dart';
     var implementationPath =
         '$rootPath/lib/core/data/data_sources/$nameWithoutSuffix/$suffix/${dataSourceName}_data_source_implementation.dart';
     var implementationTestPath =
         '$rootPath/test/core/data/data_sources/$nameWithoutSuffix/$suffix/${dataSourceName}_data_source_implementation_test.dart';
-
-    print(implementationTestPath);
 
     await file_utils.createFunction(
       abstractionPath,
